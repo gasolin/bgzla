@@ -6,7 +6,7 @@
         "name": "Fred Lin",
         "url": "https://github.com/gasolin/bgzla"
     },
-    "launch_path": "index.html",
+    "launch_path": "/bgzla/index.html",
     "default_locale": "en",
     "icons":{
         "128": "style/icons/icon128.png"
