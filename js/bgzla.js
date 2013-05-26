@@ -140,7 +140,9 @@ jQuery(document).ready(function($) {
       }
     });
   }
-  emit_myid_change();
+  if (my_email !== null) {
+    emit_myid_change();
+  }
 
 });
 
