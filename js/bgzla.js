@@ -15,9 +15,18 @@ function format_bug(bug) {
   return item;
 }
 
+
 // init
 jQuery(document).ready(function($) {
   var bugzilla = bz.createClient();
+  var my_email = localStorage.my_email || null;
+  $('#my_id').click(function() {
+    my_email = prompt('your email:');
+    console.log('default account changed to ' + my_email);
+    localStorage.my_email = my_email;
+    emit_myid_change();
+  });
+
   $('#tef_cnt').bind('touchstart click', function(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -63,11 +72,11 @@ jQuery(document).ready(function($) {
       'product': 'Boot2Gecko'
     };
 
-  var tef_bugs;
+  // var tef_bugs;
   // blockers: tef+, not npotb
   bugzilla.searchBugs(params, function(error, bugs) {
   if (!error) {
-    tef_bugs = bugs;
+    // tef_bugs = bugs;
     $('#tef_panel').hide();
     // console.log(bugs);
     var nobody_cnt = 0;
@@ -85,13 +94,13 @@ jQuery(document).ready(function($) {
   }
   });
 
-  var leo_bugs;
+  // var leo_bugs;
   leo_params = JSON.parse(JSON.stringify(params));
   leo_params['value0-0-0'] = 'leo+';
   // blockers: leo+, not npotb
   bugzilla.searchBugs(leo_params, function(error, bugs) {
   if (!error) {
-    leo_bugs = bugs;
+    // leo_bugs = bugs;
     $('#leo_panel').hide();
     // console.log(bugs);
     var nobody_cnt = 0;
@@ -108,6 +117,30 @@ jQuery(document).ready(function($) {
     $('#leo_nobody_cnt').text('not assigned: ' + nobody_cnt);
   }
   });
+
+  // var mine_bugs;
+  mine_params = JSON.parse(JSON.stringify(params));
+  delete mine_params['value0-0-0'];
+
+  function emit_myid_change() {
+    console.log('fetch ' + my_email);
+    mine_params['email1'] = my_email;
+    mine_params['email1_assigned_to'] = 1;
+    bugzilla.searchBugs(mine_params, function(error, bugs) {
+      if (!error) {
+        // console.log(bugs);
+        // mine_bugs = bugs;
+        var outcome = '<ul>';
+        for (var i = 0; i < bugs.length; i++) {
+          outcome += format_bug(bugs[i]);
+        }
+        outcome += '</ul>';
+        $('#mine_panel').html(outcome);
+        $('#mine_cnt').text(bugs.length);
+      }
+    });
+  }
+  emit_myid_change();
 
 });
 
