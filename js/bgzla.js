@@ -27,7 +27,7 @@ jQuery(document).ready(function($) {
     emit_myid_change();
   });
 
-  $('#tef_cnt').bind('touchstart click', function(event) {
+  $('#tef_cnt').bind('touchstart mousedown', function(event) {
     event.stopPropagation();
     event.preventDefault();
     if (event.handled !== true) {
@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
     }
   });
 
-  $('#leo_cnt').bind('touchstart click', function(event) {
+  $('#leo_cnt').bind('touchstart mousedown', function(event) {
     event.stopPropagation();
     event.preventDefault();
     if (event.handled !== true) {
