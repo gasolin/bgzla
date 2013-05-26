@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
   var bugzilla = bz.createClient();
   var my_email = localStorage.my_email || null;
   $('#my_id').click(function() {
-    my_email = prompt('your email:');
+    my_email = prompt('Enter your email(only stored in this browser):');
     console.log('default account changed to ' + my_email);
     localStorage.my_email = my_email;
     emit_myid_change();
