@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "name": "bgzla",
+    "description": "Bugzilla Monitor for Gaia project",
+    "developer": {
+        "name": "Fred Lin",
+        "url": "https://github.com/gasolin/bgzla"
+    },
+    "launch_path": "/index.html",
+    "default_locale": "en",
+    "icons":{
+        "128": "/style/icons/icon128.png"
+    },
+    "installs_allowed_from": ["*"]
+}
