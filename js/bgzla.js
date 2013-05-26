@@ -49,6 +49,10 @@ jQuery(document).ready(function($) {
     }
   });
 
+  $('#reload').click(function() {
+    location.reload();
+  });
+
   var params = {
       'username': 'autonome+bztest@gmail.com',
       'password': 'bztest1A',

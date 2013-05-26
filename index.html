@@ -23,24 +23,32 @@
     <script src="js/app_installer.js"></script>
   </head>
   <body>
+    <div class="navbar navbar-inverse">
+      <div class="navbar-inner">
+      <a class="brand" href="#">Bgzla</a>
+      <ul class="nav pull-right">
+        <li><a href="#" id="reload"><i class='icon icon-refresh'></i> Reload</a></li>
+      </ul>
+      </div>
+    </div>
   	<div class="container">
   	  <div id="row">
         <div class="span4">
           <div id="mine_zone" class="well well-large">
-            <h3>Mine</h3><h1 id="mine_cnt"></h1>
+            <h3>Mine <i class='icon-smile'></i> </h3><h1 id="mine_cnt"></h1>
             <section id="mine_panel"></section>
-            <span><a href="#" id="my_id">Configure</a></span>
+            <span class="pull-right"><a href="#" id="my_id"><i class='icon icon-wrench'></i> Configure</a></span>
           </div>
         </div>
         <div class="span4">
           <div id="tef_zone" class="well well-large">
-            <h3>tef+ <span id="tef_nobody_cnt" class="badge"></span></h3><h1 id="tef_cnt"></h1>
+            <h3>tef+ <span id="tef_nobody_cnt" class="badge badge-warning"></span></h3><h1 id="tef_cnt"></h1>
             <section id="tef_panel"></section>
           </div>
 	      </div>
         <div class="span4">
           <div id="leo_zone" class="well well-large">
-            <h3>leo+ <span id="leo_nobody_cnt" class="badge"></span></h3><h1 id="leo_cnt"></h1>
+            <h3>leo+ <span id="leo_nobody_cnt" class="badge badge-warning"></span></h3><h1 id="leo_cnt"></h1>
             <section id="leo_panel"></section>
           </div>
         </div>
