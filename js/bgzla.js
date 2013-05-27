@@ -1,15 +1,33 @@
+var now = moment();
+var lastest = now.day(-7);
+
 function format_bug(bug) {
+  var HOT_FLAG = false;
+  // find hot bug
+  var create_time = moment(bug.creation_time);
+  if (create_time.isAfter(lastest)) {
+    HOT_FLAG = true;
+  }
+
   var assignee = ' (' + bug.assigned_to.name + ')';
   if (bug.assigned_to.name === 'nobody@mozilla.org') {
     assignee = '';
   }
   var item = '<li id="bug_' + bug.id + '">';
+  if (HOT_FLAG) {
+    item += '<i class="icon-rocket"></i> ';
+  }
   item += '[<a href="http://bugzil.la/' + bug.id + '">' +
           bug.id + '</a>] ';
   if (assignee !== '') {
     item += bug.summary + assignee;
   } else {
     item += '<em>' + bug.summary + '</em>';
+  }
+
+  // show hot bug date
+  if (HOT_FLAG) {
+    item += ' (' + create_time.format('MM/DD') + ')';
   }
   item += '</li>\n';
   return item;
@@ -82,7 +100,7 @@ jQuery(document).ready(function($) {
   if (!error) {
     // tef_bugs = bugs;
     $('#tef_panel').hide();
-    // console.log(bugs);
+    console.log(bugs);
     var nobody_cnt = 0;
     var outcome = '<ul>';
     for (var i = 0; i < bugs.length; i++) {
