@@ -1,14 +1,24 @@
+/**
+ *
+ * Author: Fred Lin (gasolin@mozilla.com)
+ * Mozilla License
+ *
+ */
+
+// get this week
 var now = moment();
 var lastest = now.day(-7);
 
+// generate the item
 function format_bug(bug) {
   var HOT_FLAG = false;
-  // find hot bug
+  // find hot bugs
   var create_time = moment(bug.creation_time);
   if (create_time.isAfter(lastest)) {
     HOT_FLAG = true;
   }
 
+  // check if has assignee
   var assignee = ' (' + bug.assigned_to.name + ')';
   if (bug.assigned_to.name === 'nobody@mozilla.org') {
     assignee = '';
@@ -36,6 +46,7 @@ function format_bug(bug) {
 
 // init
 jQuery(document).ready(function($) {
+  $('#mine_panel').hide();
   $('#hot_panel').hide();
 
   var bugzilla = bz.createClient();
@@ -45,6 +56,17 @@ jQuery(document).ready(function($) {
     console.log('default account changed to ' + my_email);
     localStorage.my_email = my_email;
     emit_myid_change();
+  });
+
+  $('#mine_cnt').bind('touchstart mousedown', function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (event.handled !== true) {
+      $('#mine_panel').toggle();
+      event.handled = true;
+    } else {
+      return false;
+    }
   });
 
   $('#tef_cnt').bind('touchstart mousedown', function(event) {
