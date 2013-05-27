@@ -36,6 +36,8 @@ function format_bug(bug) {
 
 // init
 jQuery(document).ready(function($) {
+  $('#hot_panel').hide();
+
   var bugzilla = bz.createClient();
   var my_email = localStorage.my_email || null;
   $('#my_id').click(function() {
@@ -67,6 +69,18 @@ jQuery(document).ready(function($) {
     }
   });
 
+  $('#hot_cnt').bind('touchstart mousedown', function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (event.handled !== true) {
+      $('#hot_panel').toggle();
+      event.handled = true;
+    } else {
+      return false;
+    }
+  });
+
+
   $('#reload').click(function() {
     location.reload();
   });
@@ -94,16 +108,22 @@ jQuery(document).ready(function($) {
       'product': 'Boot2Gecko'
     };
 
+  var hot_bugs = [];
   // var tef_bugs;
   // blockers: tef+, not npotb
   bugzilla.searchBugs(params, function(error, bugs) {
   if (!error) {
     // tef_bugs = bugs;
     $('#tef_panel').hide();
-    console.log(bugs);
+    // console.log(bugs);
     var nobody_cnt = 0;
     var outcome = '<ul>';
     for (var i = 0; i < bugs.length; i++) {
+
+      if (moment(bugs[i].creation_time).isAfter(lastest)) {
+        hot_bugs.push(bugs[i]);
+      }
+
       if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
         nobody_cnt += 1;
       }
@@ -113,6 +133,7 @@ jQuery(document).ready(function($) {
     $('#tef_panel').html(outcome);
     $('#tef_cnt').text(bugs.length);
     $('#tef_nobody_cnt').text('not assigned: ' + nobody_cnt);
+    emit_hot_cnt_change();
   }
   });
 
@@ -128,6 +149,11 @@ jQuery(document).ready(function($) {
     var nobody_cnt = 0;
     var outcome = '<ul>';
     for (var i = 0; i < bugs.length; i++) {
+
+      if (moment(bugs[i].creation_time).isAfter(lastest)) {
+        hot_bugs.push(bugs[i]);
+      }
+
       if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
         nobody_cnt += 1;
       }
@@ -137,6 +163,7 @@ jQuery(document).ready(function($) {
     $('#leo_panel').html(outcome);
     $('#leo_cnt').text(bugs.length);
     $('#leo_nobody_cnt').text('not assigned: ' + nobody_cnt);
+    emit_hot_cnt_change();
   }
   });
 
@@ -164,6 +191,16 @@ jQuery(document).ready(function($) {
   }
   if (my_email !== null) {
     emit_myid_change();
+  }
+
+  function emit_hot_cnt_change() {
+    var outcome = '<ul>';
+    for (var i = 0; i < hot_bugs.length; i++) {
+      outcome += format_bug(hot_bugs[i]);
+    }
+    outcome += '</ul>';
+    $('#hot_panel').html(outcome);
+    $('#hot_cnt').text(hot_bugs.length);
   }
 
 });
