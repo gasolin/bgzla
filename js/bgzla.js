@@ -192,6 +192,7 @@ jQuery(document).ready(function($) {
   // var mine_bugs;
   mine_params = JSON.parse(JSON.stringify(params));
   delete mine_params['value0-0-0'];
+  delete mine_params['component'];
 
   function emit_myid_change() {
     console.log('fetch ' + my_email);
