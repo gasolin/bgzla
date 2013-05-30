@@ -44,9 +44,20 @@ var bgzla = {
     $('#hot_panel').hide();
 
     bugzilla = bz.createClient();
-    my_email = localStorage.my_email || null;
-    // var my_password = localStorage.my_password || null;
+
     var that = this;
+
+    asyncStorage.getItem('my_email', function(value) {
+      my_email = value;
+      // var mine_bugs;
+      mine_params = JSON.parse(JSON.stringify(that.params));
+      delete mine_params['value0-0-0'];
+      delete mine_params['component'];
+      if (my_email !== null) {
+        that.emit_myid_change();
+      }
+    });
+    // var my_password = localStorage.my_password || null;
 
     $('#my_id').click(this.input_bugzilla_id.bind(this));
 
@@ -83,15 +94,6 @@ var bgzla = {
     bugzilla.searchBugs(leo_params, function(error, bugs) {
       that.bug_handler_leo(error, bugs);
     });
-
-    // var mine_bugs;
-    mine_params = JSON.parse(JSON.stringify(this.params));
-    delete mine_params['value0-0-0'];
-    delete mine_params['component'];
-    if (my_email !== null) {
-      that.emit_myid_change();
-    }
-
   },
 
   // generate the item
@@ -168,10 +170,15 @@ var bgzla = {
       my_email = prompt('Enter your bugzilla email' +
                         '(only stored in this browser):');
       // my_password = prompt('Enter your password can show secret bugs:');
-      console.log('default account changed to ' + my_email);
-      localStorage.my_email = my_email;
-      // localStorage.my_password = my_password;
-      this.emit_myid_change();
+      console.log(my_email);
+      if (my_email !== '') {
+        console.log('default account changed to ' + my_email);
+        asyncStorage.setItem('my_email', my_email);
+        // localStorage.my_password = my_password;
+        this.emit_myid_change();
+      } else {
+        alert('account not changed');
+      }
   },
 
   toggle_panel: function toggle_panel(event, panel_id) {
