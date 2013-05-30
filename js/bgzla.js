@@ -4,6 +4,7 @@
  * Mozilla License
  *
  */
+'use strict';
 
 // get this week
 var now = moment();
@@ -51,10 +52,14 @@ jQuery(document).ready(function($) {
 
   var bugzilla = bz.createClient();
   var my_email = localStorage.my_email || null;
+  // var my_password = localStorage.my_password || null;
   $('#my_id').click(function() {
-    my_email = prompt('Enter your email(only stored in this browser):');
+    my_email = prompt('Enter your bugzilla email' +
+                      '(only stored in this browser):');
+    // my_password = prompt('Enter your password can show secret bugs:');
     console.log('default account changed to ' + my_email);
     localStorage.my_email = my_email;
+    // localStorage.my_password = my_password;
     emit_myid_change();
   });
 
@@ -160,7 +165,7 @@ jQuery(document).ready(function($) {
   });
 
   // var leo_bugs;
-  leo_params = JSON.parse(JSON.stringify(params));
+  var leo_params = JSON.parse(JSON.stringify(params));
   leo_params['value0-0-0'] = 'leo+';
   // blockers: leo+, not npotb
   bugzilla.searchBugs(leo_params, function(error, bugs) {
@@ -190,12 +195,18 @@ jQuery(document).ready(function($) {
   });
 
   // var mine_bugs;
-  mine_params = JSON.parse(JSON.stringify(params));
+  var mine_params = JSON.parse(JSON.stringify(params));
   delete mine_params['value0-0-0'];
   delete mine_params['component'];
 
   function emit_myid_change() {
-    console.log('fetch ' + my_email);
+    // console.log('fetch ' + my_email + '/' + my_password);
+
+    // use personal auth
+    // if (my_email!==null && my_password!==null) {
+    //   mine_params['username'] = my_email;
+    //   mine_params['password'] = my_password;
+    // }
     mine_params['email1'] = my_email;
     mine_params['email1_assigned_to'] = 1;
     bugzilla.searchBugs(mine_params, function(error, bugs) {
