@@ -47,15 +47,7 @@ var bgzla = {
     my_email = localStorage.my_email || null;
     // var my_password = localStorage.my_password || null;
     var that = this;
-    $('#my_id').click(function() {
-      my_email = prompt('Enter your bugzilla email' +
-                        '(only stored in this browser):');
-      // my_password = prompt('Enter your password can show secret bugs:');
-      console.log('default account changed to ' + my_email);
-      localStorage.my_email = my_email;
-      // localStorage.my_password = my_password;
-      that.emit_myid_change();
-    });
+    $('#my_id').click(this.input_bugzilla_id.bind(this));
 
     $('#mine_cnt').bind('touchstart mousedown', function(event) {
       event.stopPropagation();
@@ -241,6 +233,16 @@ var bgzla = {
       outcome += '</ul>';
       $('#hot_panel').html(outcome);
       $('#hot_cnt').text(hot_bugs.length);
+  },
+
+  input_bugzilla_id: function input_bugzilla_id() {
+      my_email = prompt('Enter your bugzilla email' +
+                        '(only stored in this browser):');
+      // my_password = prompt('Enter your password can show secret bugs:');
+      console.log('default account changed to ' + my_email);
+      localStorage.my_email = my_email;
+      // localStorage.my_password = my_password;
+      this.emit_myid_change();
   }
 };
 
