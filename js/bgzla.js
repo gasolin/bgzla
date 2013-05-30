@@ -28,7 +28,7 @@ function format_bug(bug) {
   if (HOT_FLAG) {
     item += '<i class="icon-rocket"></i> ';
   }
-  item += '[<a href="http://bugzil.la/' + bug.id + '">' +
+  item += '[<a href="http://bugzil.la/' + bug.id + '" target="_blank">' +
           bug.id + '</a>] ';
   if (assignee !== '') {
     item += bug.summary + assignee;
