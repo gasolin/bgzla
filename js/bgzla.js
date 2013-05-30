@@ -50,47 +50,19 @@ var bgzla = {
     $('#my_id').click(this.input_bugzilla_id.bind(this));
 
     $('#mine_cnt').bind('touchstart mousedown', function(event) {
-      event.stopPropagation();
-      event.preventDefault();
-      if (event.handled !== true) {
-        $('#mine_panel').toggle();
-        event.handled = true;
-      } else {
-        return false;
-      }
+      that.toggle_panel(event, '#mine_panel');
     });
 
     $('#tef_cnt').bind('touchstart mousedown', function(event) {
-      event.stopPropagation();
-      event.preventDefault();
-      if (event.handled !== true) {
-        $('#tef_panel').toggle();
-        event.handled = true;
-      } else {
-        return false;
-      }
+      that.toggle_panel(event, '#tef_panel');
     });
 
     $('#leo_cnt').bind('touchstart mousedown', function(event) {
-      event.stopPropagation();
-      event.preventDefault();
-      if (event.handled !== true) {
-        $('#leo_panel').toggle();
-        event.handled = true;
-      } else {
-        return false;
-      }
+      that.toggle_panel(event, '#leo_panel');
     });
 
     $('#hot_cnt').bind('touchstart mousedown', function(event) {
-      event.stopPropagation();
-      event.preventDefault();
-      if (event.handled !== true) {
-        $('#hot_panel').toggle();
-        event.handled = true;
-      } else {
-        return false;
-      }
+      that.toggle_panel(event, '#hot_panel');
     });
 
     $('#reload').click(function() {
@@ -243,6 +215,17 @@ var bgzla = {
       localStorage.my_email = my_email;
       // localStorage.my_password = my_password;
       this.emit_myid_change();
+  },
+
+  toggle_panel: function toggle_panel(event, panel_id) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (event.handled !== true) {
+      $(panel_id).toggle();
+      event.handled = true;
+    } else {
+      return false;
+    }
   }
 };
 
