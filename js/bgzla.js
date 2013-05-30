@@ -47,6 +47,7 @@ var bgzla = {
     my_email = localStorage.my_email || null;
     // var my_password = localStorage.my_password || null;
     var that = this;
+
     $('#my_id').click(this.input_bugzilla_id.bind(this));
 
     $('#mine_cnt').bind('touchstart mousedown', function(event) {
@@ -72,29 +73,7 @@ var bgzla = {
     // var tef_bugs;
     // blockers: tef+, not npotb
     bugzilla.searchBugs(this.params, function(error, bugs) {
-    if (!error) {
-      // tef_bugs = bugs;
-      $('#tef_panel').hide();
-      // console.log(bugs);
-      var nobody_cnt = 0;
-      var outcome = '<ul>';
-      for (var i = 0; i < bugs.length; i++) {
-
-        if (moment(bugs[i].creation_time).isAfter(lastest)) {
-          hot_bugs.push(bugs[i]);
-        }
-
-        if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
-          nobody_cnt += 1;
-        }
-        outcome += that.format_bug(bugs[i]);
-      }
-      outcome += '</ul>';
-      $('#tef_panel').html(outcome);
-      $('#tef_cnt').text(bugs.length);
-      $('#tef_nobody_cnt').text('not assigned: ' + nobody_cnt);
-      that.emit_hot_cnt_change();
-    }
+      that.bug_handler_tef(error, bugs);
     });
 
     // var leo_bugs;
@@ -102,29 +81,7 @@ var bgzla = {
     leo_params['value0-0-0'] = 'leo+';
     // blockers: leo+, not npotb
     bugzilla.searchBugs(leo_params, function(error, bugs) {
-    if (!error) {
-      // leo_bugs = bugs;
-      $('#leo_panel').hide();
-      // console.log(bugs);
-      var nobody_cnt = 0;
-      var outcome = '<ul>';
-      for (var i = 0; i < bugs.length; i++) {
-
-        if (moment(bugs[i].creation_time).isAfter(lastest)) {
-          hot_bugs.push(bugs[i]);
-        }
-
-        if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
-          nobody_cnt += 1;
-        }
-        outcome += that.format_bug(bugs[i]);
-      }
-      outcome += '</ul>';
-      $('#leo_panel').html(outcome);
-      $('#leo_cnt').text(bugs.length);
-      $('#leo_nobody_cnt').text('not assigned: ' + nobody_cnt);
-      that.emit_hot_cnt_change();
-    }
+      that.bug_handler_leo(error, bugs);
     });
 
     // var mine_bugs;
@@ -226,7 +183,60 @@ var bgzla = {
     } else {
       return false;
     }
+  },
+
+  bug_handler_tef: function bug_handler_tef(error, bugs) {
+    if (!error) {
+      // tef_bugs = bugs;
+      $('#tef_panel').hide();
+      // console.log(bugs);
+      var nobody_cnt = 0;
+      var outcome = '<ul>';
+      for (var i = 0; i < bugs.length; i++) {
+
+        if (moment(bugs[i].creation_time).isAfter(lastest)) {
+          hot_bugs.push(bugs[i]);
+        }
+
+        if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
+          nobody_cnt += 1;
+        }
+        outcome += this.format_bug(bugs[i]);
+      }
+      outcome += '</ul>';
+      $('#tef_panel').html(outcome);
+      $('#tef_cnt').text(bugs.length);
+      $('#tef_nobody_cnt').text('not assigned: ' + nobody_cnt);
+      this.emit_hot_cnt_change();
+    }
+  },
+
+  bug_handler_leo: function bug_handler_leo(error, bugs) {
+    if (!error) {
+      // leo_bugs = bugs;
+      $('#leo_panel').hide();
+      // console.log(bugs);
+      var nobody_cnt = 0;
+      var outcome = '<ul>';
+      for (var i = 0; i < bugs.length; i++) {
+
+        if (moment(bugs[i].creation_time).isAfter(lastest)) {
+          hot_bugs.push(bugs[i]);
+        }
+
+        if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
+          nobody_cnt += 1;
+        }
+        outcome += this.format_bug(bugs[i]);
+      }
+      outcome += '</ul>';
+      $('#leo_panel').html(outcome);
+      $('#leo_cnt').text(bugs.length);
+      $('#leo_nobody_cnt').text('not assigned: ' + nobody_cnt);
+      this.emit_hot_cnt_change();
+    }
   }
+
 };
 
 window.addEventListener('load', function browserOnLoad(evt) {
