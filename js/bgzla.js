@@ -6,15 +6,11 @@
  */
 'use strict';
 
-// get this week
-var now = moment();
-var lastest = this.now.day(-7);
-var hot_bugs = [];
-var mine_params;
-var my_email;
-var bugzilla;
-
-var bgzla = {
+var GAIA = {
+  lastest: moment().day(-7),
+  hot_bugs: [],
+  my_email: null,
+  bugzilla: null,
   params: {
         'username': 'autonome+bztest@gmail.com',
         'password': 'bztest1A',
@@ -37,23 +33,28 @@ var bgzla = {
                      ],
         'product': 'Boot2Gecko'
   },
+  tef_params: null,
+  leo_params: null,
+  mine_params: null
+};
 
+var bgzla = {
   // init
   init: function init() {
     $('#mine_panel').hide();
     $('#hot_panel').hide();
 
-    bugzilla = bz.createClient();
+    GAIA.bugzilla = bz.createClient();
 
     var that = this;
 
     asyncStorage.getItem('my_email', function(value) {
-      my_email = value;
+      GAIA.my_email = value;
       // var mine_bugs;
-      mine_params = JSON.parse(JSON.stringify(that.params));
-      delete mine_params['value0-0-0'];
-      delete mine_params['component'];
-      if (my_email !== null) {
+      GAIA.mine_params = JSON.parse(JSON.stringify(GAIA.params));
+      delete GAIA.mine_params['value0-0-0'];
+      delete GAIA.mine_params['component'];
+      if (GAIA.my_email !== null) {
         that.emit_myid_change();
       }
     });
@@ -82,16 +83,17 @@ var bgzla = {
     });
 
     // var tef_bugs;
+    GAIA.tef_params = JSON.parse(JSON.stringify(GAIA.params));
     // blockers: tef+, not npotb
-    bugzilla.searchBugs(this.params, function(error, bugs) {
+    GAIA.bugzilla.searchBugs(GAIA.tef_params, function(error, bugs) {
       that.bug_handler_tef(error, bugs);
     });
 
     // var leo_bugs;
-    var leo_params = JSON.parse(JSON.stringify(this.params));
-    leo_params['value0-0-0'] = 'leo+';
+    GAIA.leo_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.leo_params['value0-0-0'] = 'leo+';
     // blockers: leo+, not npotb
-    bugzilla.searchBugs(leo_params, function(error, bugs) {
+    GAIA.bugzilla.searchBugs(GAIA.leo_params, function(error, bugs) {
       that.bug_handler_leo(error, bugs);
     });
   },
@@ -101,7 +103,7 @@ var bgzla = {
     var HOT_FLAG = false;
     // find hot bugs
     var create_time = moment(bug.creation_time);
-    if (create_time.isAfter(lastest)) {
+    if (create_time.isAfter(GAIA.lastest)) {
       HOT_FLAG = true;
     }
 
@@ -138,10 +140,10 @@ var bgzla = {
       //   mine_params['username'] = my_email;
       //   mine_params['password'] = my_password;
       // }
-      mine_params['email1'] = my_email;
-      mine_params['email1_assigned_to'] = 1;
+      GAIA.mine_params['email1'] = GAIA.my_email;
+      GAIA.mine_params['email1_assigned_to'] = 1;
       var that = this;
-      bugzilla.searchBugs(mine_params, function(error, bugs) {
+      GAIA.bugzilla.searchBugs(GAIA.mine_params, function(error, bugs) {
         if (!error) {
           // console.log(bugs);
           // mine_bugs = bugs;
@@ -158,19 +160,18 @@ var bgzla = {
 
   emit_hot_cnt_change: function emit_hot_cnt_change() {
       var outcome = '<ul>';
-      for (var i = 0; i < hot_bugs.length; i++) {
-        outcome += this.format_bug(hot_bugs[i]);
+      for (var i = 0; i < GAIA.hot_bugs.length; i++) {
+        outcome += this.format_bug(GAIA.hot_bugs[i]);
       }
       outcome += '</ul>';
       $('#hot_panel').html(outcome);
-      $('#hot_cnt').text(hot_bugs.length);
+      $('#hot_cnt').text(GAIA.hot_bugs.length);
   },
 
   input_bugzilla_id: function input_bugzilla_id() {
       my_email = prompt('Enter your bugzilla email' +
                         '(only stored in this browser):');
       // my_password = prompt('Enter your password can show secret bugs:');
-      console.log(my_email);
       if (my_email !== '') {
         console.log('default account changed to ' + my_email);
         asyncStorage.setItem('my_email', my_email);
@@ -201,8 +202,8 @@ var bgzla = {
       var outcome = '<ul>';
       for (var i = 0; i < bugs.length; i++) {
 
-        if (moment(bugs[i].creation_time).isAfter(lastest)) {
-          hot_bugs.push(bugs[i]);
+        if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
+          GAIA.hot_bugs.push(bugs[i]);
         }
 
         if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
@@ -227,8 +228,8 @@ var bgzla = {
       var outcome = '<ul>';
       for (var i = 0; i < bugs.length; i++) {
 
-        if (moment(bugs[i].creation_time).isAfter(lastest)) {
-          hot_bugs.push(bugs[i]);
+        if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
+          GAIA.hot_bugs.push(bugs[i]);
         }
 
         if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
