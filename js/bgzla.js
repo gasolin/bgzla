@@ -9,7 +9,7 @@
 var GAIA = {
   lastest: moment().day(-7),
   hot_bugs: [],
-  my_email: null,
+  my_email: '',
   bugzilla: null,
   params: {
         'username': 'autonome+bztest@gmail.com',
@@ -169,12 +169,12 @@ var bgzla = {
   },
 
   input_bugzilla_id: function input_bugzilla_id() {
-      my_email = prompt('Enter your bugzilla email' +
+      GAIA.my_email = prompt('Enter your bugzilla email' +
                         '(only stored in this browser):');
       // my_password = prompt('Enter your password can show secret bugs:');
-      if (my_email !== '') {
-        console.log('default account changed to ' + my_email);
-        asyncStorage.setItem('my_email', my_email);
+      if (GAIA.my_email !== '') {
+        console.log('default account changed to ' + GAIA.my_email);
+        asyncStorage.setItem('my_email', GAIA.my_email);
         // localStorage.my_password = my_password;
         this.emit_myid_change();
       } else {
