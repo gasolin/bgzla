@@ -17,7 +17,6 @@ var GAIA = {
         'bug_status': ['NEW', 'UNCONFIRMED', 'ASSIGNED', 'REOPENED', 'READY'],
         'field0-0-0': 'cf_blocking_b2g',
         'type0-0-0': 'contains',
-        'value0-0-0': 'tef+',
         'field1-0-0': 'whiteboard',
         'type1-0-0': 'not_contains',
         'value1-0-0': 'npotb',
@@ -84,6 +83,7 @@ var bgzla = {
 
     // var tef_bugs;
     GAIA.tef_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.tef_params['value0-0-0'] = 'tef+';
     // blockers: tef+, not npotb
     GAIA.bugzilla.searchBugs(GAIA.tef_params, function(error, bugs) {
       that.bug_handler_tef(error, bugs);
