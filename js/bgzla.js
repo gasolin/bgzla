@@ -65,14 +65,6 @@ var bgzla = {
       that.toggle_panel(event, '#mine_panel');
     });
 
-    $('#tef_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#tef_panel');
-    });
-
-    $('#leo_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#leo_panel');
-    });
-
     $('#hot_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#hot_panel');
     });
@@ -89,12 +81,32 @@ var bgzla = {
       that.bug_handler_tef(error, bugs);
     });
 
+    $('#tef_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#tef_panel');
+    });
+
     // var leo_bugs;
     GAIA.leo_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.leo_params['value0-0-0'] = 'leo+';
     // blockers: leo+, not npotb
     GAIA.bugzilla.searchBugs(GAIA.leo_params, function(error, bugs) {
       that.bug_handler_leo(error, bugs);
+    });
+
+    $('#leo_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#leo_panel');
+    });
+
+    // var koi_bugs;
+    GAIA.koi_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.koi_params['value0-0-0'] = 'koi+';
+    // blockers: leo+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.koi_params, function(error, bugs) {
+      that.bug_handler_koi(error, bugs);
+    });
+
+    $('#koi_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#koi_panel');
     });
   },
 
@@ -241,6 +253,32 @@ var bgzla = {
       $('#leo_panel').html(outcome);
       $('#leo_cnt').text(bugs.length);
       $('#leo_nobody_cnt').text('not assigned: ' + nobody_cnt);
+      this.emit_hot_cnt_change();
+    }
+  },
+
+  bug_handler_koi: function bug_handler_koi(error, bugs) {
+    if (!error) {
+      // koi_bugs = bugs;
+      $('#koi_panel').hide();
+      // console.log(bugs);
+      var nobody_cnt = 0;
+      var outcome = '<ul>';
+      for (var i = 0; i < bugs.length; i++) {
+
+        if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
+          GAIA.hot_bugs.push(bugs[i]);
+        }
+
+        if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
+          nobody_cnt += 1;
+        }
+        outcome += this.format_bug(bugs[i]);
+      }
+      outcome += '</ul>';
+      $('#koi_panel').html(outcome);
+      $('#koi_cnt').text(bugs.length);
+      $('#koi_nobody_cnt').text('not assigned: ' + nobody_cnt);
       this.emit_hot_cnt_change();
     }
   }
