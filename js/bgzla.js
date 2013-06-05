@@ -40,9 +40,6 @@ var GAIA = {
 var bgzla = {
   // init
   init: function init() {
-    $('#mine_panel').hide();
-    $('#hot_panel').hide();
-
     GAIA.bugzilla = bz.createClient();
 
     var that = this;
@@ -167,6 +164,7 @@ var bgzla = {
           outcome += '</ul>';
           $('#mine_panel').html(outcome);
           $('#mine_cnt').text(bugs.length);
+          $('#mine_panel').show();
         }
       });
   },
@@ -178,6 +176,7 @@ var bgzla = {
         outcome += this.format_bug(GAIA.hot_bugs[i]);
       }
       outcome += '</ul>';
+      $('#hot_panel').hide();
       $('#hot_panel').html(outcome);
       $('#hot_cnt').text(GAIA.hot_bugs.length);
   },
