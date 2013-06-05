@@ -160,6 +160,7 @@ var bgzla = {
           // console.log(bugs);
           // mine_bugs = bugs;
           var outcome = '<ul>';
+          bugs.sort(that.sorters.byIdDesc);
           for (var i = 0; i < bugs.length; i++) {
             outcome += that.format_bug(bugs[i]);
           }
@@ -172,6 +173,7 @@ var bgzla = {
 
   emit_hot_cnt_change: function emit_hot_cnt_change() {
       var outcome = '<ul>';
+      GAIA.hot_bugs.sort(this.sorters.byIdDesc);
       for (var i = 0; i < GAIA.hot_bugs.length; i++) {
         outcome += this.format_bug(GAIA.hot_bugs[i]);
       }
@@ -212,6 +214,7 @@ var bgzla = {
       // console.log(bugs);
       var nobody_cnt = 0;
       var outcome = '<ul>';
+      bugs.sort(this.sorters.byIdDesc);
       for (var i = 0; i < bugs.length; i++) {
 
         if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
@@ -238,6 +241,7 @@ var bgzla = {
       // console.log(bugs);
       var nobody_cnt = 0;
       var outcome = '<ul>';
+      bugs.sort(this.sorters.byIdDesc);
       for (var i = 0; i < bugs.length; i++) {
 
         if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
@@ -264,6 +268,7 @@ var bgzla = {
       // console.log(bugs);
       var nobody_cnt = 0;
       var outcome = '<ul>';
+      bugs.sort(this.sorters.byIdDesc);
       for (var i = 0; i < bugs.length; i++) {
 
         if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
@@ -281,8 +286,14 @@ var bgzla = {
       $('#koi_nobody_cnt').text('not assigned: ' + nobody_cnt);
       this.emit_hot_cnt_change();
     }
-  }
+  },
 
+  // a list of sorting functions
+  sorters: {
+      byIdDesc : function(a,b) {
+          return (b.id - a.id);
+      }
+  }
 };
 
 window.addEventListener('load', function browserOnLoad(evt) {
