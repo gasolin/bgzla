@@ -75,7 +75,7 @@ var bgzla = {
 
     // var tef_bugs;
     GAIA.tef_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.tef_params['value0-0-0'] = 'tef+';
+    GAIA.tef_params['value0-0-0'] = 'hd+';
     // blockers: tef+, not npotb
     GAIA.bugzilla.searchBugs(GAIA.tef_params, function(error, bugs) {
       that.bug_handler_tef(error, bugs);
