@@ -1,4 +1,4 @@
-/**
+/*
  *
  * Author: Fred Lin (gasolin@mozilla.com)
  * Mozilla License
@@ -34,7 +34,8 @@ var GAIA = {
   },
   tef_params: null,
   leo_params: null,
-  mine_params: null
+  mine_params: null,
+  dataRef: 'https://mozilla-bgzla.firebaseIO.com/flag/'
 };
 
 var bgzla = {
@@ -230,6 +231,18 @@ var bgzla = {
       $('#tef_cnt').text(bugs.length);
       $('#tef_nobody_cnt').text('not assigned: ' + nobody_cnt);
       this.emit_hot_cnt_change();
+
+      var todayRef = new Firebase(GAIA.dataRef + 'hd+/' + moment.utc().format("YYYY-MM-DD"));
+      todayRef.on('value', function(snapshot) {
+        if(snapshot.val() === null) {
+          todayRef.set(0);
+        } else {
+          if (bugs.length > snapshot.val()) {
+            console.log('update');
+            todayRef.set(bugs.length);
+          }
+        }
+      });
     }
   },
 
@@ -257,6 +270,18 @@ var bgzla = {
       $('#leo_cnt').text(bugs.length);
       $('#leo_nobody_cnt').text('not assigned: ' + nobody_cnt);
       this.emit_hot_cnt_change();
+
+      var todayRef = new Firebase(GAIA.dataRef + 'leo+/' + moment.utc().format("YYYY-MM-DD"));
+      todayRef.on('value', function(snapshot) {
+        if(snapshot.val() === null) {
+          todayRef.set(0);
+        } else {
+          if (bugs.length > snapshot.val()) {
+            console.log('update');
+            todayRef.set(bugs.length);
+          }
+        }
+      });
     }
   },
 
@@ -284,6 +309,18 @@ var bgzla = {
       $('#koi_cnt').text(bugs.length);
       $('#koi_nobody_cnt').text('not assigned: ' + nobody_cnt);
       this.emit_hot_cnt_change();
+
+      var todayRef = new Firebase(GAIA.dataRef + 'koi+/' + moment.utc().format("YYYY-MM-DD"));
+      todayRef.on('value', function(snapshot) {
+        if(snapshot.val() === null) {
+          todayRef.set(0);
+        } else {
+          if (bugs.length > snapshot.val()) {
+            console.log('update');
+            todayRef.set(bugs.length);
+          }
+        }
+      });
     }
   },
 
