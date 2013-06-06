@@ -8,6 +8,7 @@
 
 var GAIA = {
   lastest: moment().day(-7),
+  inactive: moment().day(-4),
   hot_bugs: [],
   my_email: '',
   bugzilla: null,
@@ -116,13 +117,22 @@ var bgzla = {
     if (create_time.isAfter(GAIA.lastest)) {
       HOT_FLAG = true;
     }
+    var INACTIVE_FLAG = false;
+    var last_change_time = moment(bug.last_change_time);
+    if (last_change_time.isBefore(GAIA.inactive)) {
+      INACTIVE_FLAG = true;
+    }
 
     // check if has assignee
     var assignee = ' (' + bug.assigned_to.name + ')';
     if (bug.assigned_to.name === 'nobody@mozilla.org') {
       assignee = '';
     }
-    var item = '<li id="bug_' + bug.id + '">';
+    var item = '<li id="bug_' + bug.id;
+    if (INACTIVE_FLAG) {
+      item += '" class="inactive';
+    }
+    item += '">';
     if (HOT_FLAG) {
       item += '<i class="icon-rocket"></i> ';
     }
@@ -232,9 +242,10 @@ var bgzla = {
       $('#tef_nobody_cnt').text('not assigned: ' + nobody_cnt);
       this.emit_hot_cnt_change();
 
-      var todayRef = new Firebase(GAIA.dataRef + 'hd+/' + moment.utc().format("YYYY-MM-DD"));
+      var todayRef = new Firebase(GAIA.dataRef + 'hd+/' +
+        moment.utc().format('YYYY-MM-DD'));
       todayRef.on('value', function(snapshot) {
-        if(snapshot.val() === null) {
+        if (snapshot.val() === null) {
           todayRef.set(0);
         } else {
           if (bugs.length > snapshot.val()) {
@@ -271,9 +282,10 @@ var bgzla = {
       $('#leo_nobody_cnt').text('not assigned: ' + nobody_cnt);
       this.emit_hot_cnt_change();
 
-      var todayRef = new Firebase(GAIA.dataRef + 'leo+/' + moment.utc().format("YYYY-MM-DD"));
+      var todayRef = new Firebase(GAIA.dataRef + 'leo+/' +
+        moment.utc().format('YYYY-MM-DD'));
       todayRef.on('value', function(snapshot) {
-        if(snapshot.val() === null) {
+        if (snapshot.val() === null) {
           todayRef.set(0);
         } else {
           if (bugs.length > snapshot.val()) {
@@ -310,9 +322,10 @@ var bgzla = {
       $('#koi_nobody_cnt').text('not assigned: ' + nobody_cnt);
       this.emit_hot_cnt_change();
 
-      var todayRef = new Firebase(GAIA.dataRef + 'koi+/' + moment.utc().format("YYYY-MM-DD"));
+      var todayRef = new Firebase(GAIA.dataRef + 'koi+/' +
+        moment.utc().format('YYYY-MM-DD'));
       todayRef.on('value', function(snapshot) {
-        if(snapshot.val() === null) {
+        if (snapshot.val() === null) {
           todayRef.set(0);
         } else {
           if (bugs.length > snapshot.val()) {
@@ -326,7 +339,7 @@ var bgzla = {
 
   // a list of sorting functions
   sorters: {
-      byIdDesc : function(a,b) {
+      byIdDesc: function(a, b) {
           return (b.id - a.id);
       }
   }

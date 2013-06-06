@@ -10,3 +10,7 @@ html, body {
 em {
 	color: #669900;
 }
+
+.inactive {
+	color: #b2b2b2 !important;
+}
