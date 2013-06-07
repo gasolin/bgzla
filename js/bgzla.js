@@ -41,7 +41,7 @@ var GAIA = {
 
 var bgzla = {
   // init
-  init: function init() {
+  init: function() {
     GAIA.bugzilla = bz.createClient();
 
     var that = this;
@@ -107,10 +107,12 @@ var bgzla = {
     $('#koi_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#koi_panel');
     });
+
+    this.plot_trend();
   },
 
   // generate the item
-  format_bug: function format_bug(bug) {
+  format_bug: function(bug) {
     var HOT_FLAG = false;
     // find hot bugs
     var create_time = moment(bug.creation_time);
@@ -152,7 +154,7 @@ var bgzla = {
     return item;
   },
 
-  emit_myid_change: function emit_myid_change() {
+  emit_myid_change: function() {
       // console.log('fetch ' + my_email + '/' + my_password);
 
       // use personal auth
@@ -180,7 +182,7 @@ var bgzla = {
       });
   },
 
-  emit_hot_cnt_change: function emit_hot_cnt_change() {
+  emit_hot_cnt_change: function() {
       var outcome = '<ul>';
       GAIA.hot_bugs.sort(this.sorters.byIdDesc);
       for (var i = 0; i < GAIA.hot_bugs.length; i++) {
@@ -192,7 +194,7 @@ var bgzla = {
       $('#hot_cnt').text(GAIA.hot_bugs.length);
   },
 
-  input_bugzilla_id: function input_bugzilla_id() {
+  input_bugzilla_id: function() {
       GAIA.my_email = prompt('Enter your bugzilla email' +
                         '(only stored in this browser):');
       // my_password = prompt('Enter your password can show secret bugs:');
@@ -206,7 +208,7 @@ var bgzla = {
       }
   },
 
-  toggle_panel: function toggle_panel(event, panel_id) {
+  toggle_panel: function(event, panel_id) {
     event.stopPropagation();
     event.preventDefault();
     if (event.handled !== true) {
@@ -217,7 +219,11 @@ var bgzla = {
     }
   },
 
-  bug_handler_tef: function bug_handler_tef(error, bugs) {
+  base_bug_handler: function() {
+
+  },
+
+  bug_handler_tef: function(error, bugs) {
     if (!error) {
       // tef_bugs = bugs;
       $('#tef_panel').hide();
@@ -257,7 +263,7 @@ var bgzla = {
     }
   },
 
-  bug_handler_leo: function bug_handler_leo(error, bugs) {
+  bug_handler_leo: function(error, bugs) {
     if (!error) {
       // leo_bugs = bugs;
       $('#leo_panel').hide();
@@ -297,7 +303,7 @@ var bgzla = {
     }
   },
 
-  bug_handler_koi: function bug_handler_koi(error, bugs) {
+  bug_handler_koi: function(error, bugs) {
     if (!error) {
       // koi_bugs = bugs;
       $('#koi_panel').hide();
@@ -335,6 +341,60 @@ var bgzla = {
         }
       });
     }
+  },
+
+  plot_trend: function() {
+    var trend_1 = [];
+    var trend_2 = [];
+    var trend_3 = [];
+
+    var tefRef = new Firebase(GAIA.dataRef);
+    tefRef.on('value', function(snapshot) {
+      if (snapshot.val() !== null) {
+        var data = snapshot.val();
+        var subfix = ' 6:00AM';
+        // console.log(that.data);
+        for(var i in data['leo ']) {
+          trend_1.push([i + subfix, data['leo '][i]]);
+        }
+        for(var i in data['hd ']) {
+          trend_2.push([i + subfix, data['hd '][i]]);
+        }
+        for(var i in data['koi ']) {
+          trend_3.push([i + subfix, data['koi '][i]]);
+        }
+        // console.log(line1);
+        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3], {
+          title:'Daily Trend',
+          stackSeries: true,
+          legend: {
+              show: true,
+              placement: 'outsideGrid'
+          },
+          axes:{
+            xaxis:{
+              renderer:$.jqplot.DateAxisRenderer,
+              tickOptions: {
+                formatString:'%b %#d',
+                angle: -30
+              },
+              tickInterval: "1 day"
+            }
+          },
+          series:[
+            {label:'leo+'},
+            {label:'hd+'},
+            {label:'koi+'}
+          ],
+          seriesDefaults: {
+            lineWidth:4,
+            renderer: $.jqplot.BarRenderer,
+            rendererOptions:{barMargin: 25},
+            pointLabels:{stackedValue: true}
+          }
+        });
+      }
+    });
   },
 
   // a list of sorting functions
