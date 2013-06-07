@@ -219,127 +219,58 @@ var bgzla = {
     }
   },
 
-  base_bug_handler: function() {
+  base_bug_handler: function(bugs, panel, cnt, nobody, tag) {
+    $(panel).hide();
+    // console.log(bugs);
+    var nobody_cnt = 0;
+    var outcome = '<ul>';
+    bugs.sort(this.sorters.byIdDesc);
+    for (var i = 0; i < bugs.length; i++) {
 
+      if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
+        GAIA.hot_bugs.push(bugs[i]);
+      }
+
+      if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
+        nobody_cnt += 1;
+      }
+      outcome += this.format_bug(bugs[i]);
+    }
+    outcome += '</ul>';
+    $(panel).html(outcome);
+    $(cnt).text(bugs.length);
+    $(nobody).text('not assigned: ' + nobody_cnt);
+    this.emit_hot_cnt_change();
+
+    var todayRef = new Firebase(GAIA.dataRef + tag +
+      moment.utc().format('YYYY-MM-DD'));
+    todayRef.on('value', function(snapshot) {
+      if (snapshot.val() === null) {
+        todayRef.set(0);
+      } else {
+        if (bugs.length > snapshot.val()) {
+          console.log('update');
+          todayRef.set(bugs.length);
+        }
+      }
+    });
   },
 
   bug_handler_tef: function(error, bugs) {
     if (!error) {
-      // tef_bugs = bugs;
-      $('#tef_panel').hide();
-      // console.log(bugs);
-      var nobody_cnt = 0;
-      var outcome = '<ul>';
-      bugs.sort(this.sorters.byIdDesc);
-      for (var i = 0; i < bugs.length; i++) {
-
-        if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
-          GAIA.hot_bugs.push(bugs[i]);
-        }
-
-        if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
-          nobody_cnt += 1;
-        }
-        outcome += this.format_bug(bugs[i]);
-      }
-      outcome += '</ul>';
-      $('#tef_panel').html(outcome);
-      $('#tef_cnt').text(bugs.length);
-      $('#tef_nobody_cnt').text('not assigned: ' + nobody_cnt);
-      this.emit_hot_cnt_change();
-
-      var todayRef = new Firebase(GAIA.dataRef + 'hd+/' +
-        moment.utc().format('YYYY-MM-DD'));
-      todayRef.on('value', function(snapshot) {
-        if (snapshot.val() === null) {
-          todayRef.set(0);
-        } else {
-          if (bugs.length > snapshot.val()) {
-            console.log('update');
-            todayRef.set(bugs.length);
-          }
-        }
-      });
+      this.base_bug_handler(bugs, '#tef_panel', '#tef_cnt', '#tef_nobody_cnt', 'hd+/');
     }
   },
 
   bug_handler_leo: function(error, bugs) {
     if (!error) {
-      // leo_bugs = bugs;
-      $('#leo_panel').hide();
-      // console.log(bugs);
-      var nobody_cnt = 0;
-      var outcome = '<ul>';
-      bugs.sort(this.sorters.byIdDesc);
-      for (var i = 0; i < bugs.length; i++) {
-
-        if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
-          GAIA.hot_bugs.push(bugs[i]);
-        }
-
-        if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
-          nobody_cnt += 1;
-        }
-        outcome += this.format_bug(bugs[i]);
-      }
-      outcome += '</ul>';
-      $('#leo_panel').html(outcome);
-      $('#leo_cnt').text(bugs.length);
-      $('#leo_nobody_cnt').text('not assigned: ' + nobody_cnt);
-      this.emit_hot_cnt_change();
-
-      var todayRef = new Firebase(GAIA.dataRef + 'leo+/' +
-        moment.utc().format('YYYY-MM-DD'));
-      todayRef.on('value', function(snapshot) {
-        if (snapshot.val() === null) {
-          todayRef.set(0);
-        } else {
-          if (bugs.length > snapshot.val()) {
-            console.log('update');
-            todayRef.set(bugs.length);
-          }
-        }
-      });
+      this.base_bug_handler(bugs, '#leo_panel', '#leo_cnt', '#leo_nobody_cnt', 'leo+/');
     }
   },
 
   bug_handler_koi: function(error, bugs) {
     if (!error) {
-      // koi_bugs = bugs;
-      $('#koi_panel').hide();
-      // console.log(bugs);
-      var nobody_cnt = 0;
-      var outcome = '<ul>';
-      bugs.sort(this.sorters.byIdDesc);
-      for (var i = 0; i < bugs.length; i++) {
-
-        if (moment(bugs[i].creation_time).isAfter(GAIA.lastest)) {
-          GAIA.hot_bugs.push(bugs[i]);
-        }
-
-        if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
-          nobody_cnt += 1;
-        }
-        outcome += this.format_bug(bugs[i]);
-      }
-      outcome += '</ul>';
-      $('#koi_panel').html(outcome);
-      $('#koi_cnt').text(bugs.length);
-      $('#koi_nobody_cnt').text('not assigned: ' + nobody_cnt);
-      this.emit_hot_cnt_change();
-
-      var todayRef = new Firebase(GAIA.dataRef + 'koi+/' +
-        moment.utc().format('YYYY-MM-DD'));
-      todayRef.on('value', function(snapshot) {
-        if (snapshot.val() === null) {
-          todayRef.set(0);
-        } else {
-          if (bugs.length > snapshot.val()) {
-            console.log('update');
-            todayRef.set(bugs.length);
-          }
-        }
-      });
+      this.base_bug_handler(bugs, '#koi_panel', '#koi_cnt', '#koi_nobody_cnt', 'koi+/');
     }
   },
 
