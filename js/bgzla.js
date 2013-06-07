@@ -299,8 +299,13 @@ var bgzla = {
           title:'Daily Trend',
           stackSeries: true,
           legend: {
+              renderer: $.jqplot.EnhancedLegendRenderer,
               show: true,
-              placement: 'outsideGrid'
+              placement: 'insideGrid',
+              location: 's',
+              rendererOptions: {
+                numberRows: 1
+              }
           },
           axes:{
             xaxis:{
