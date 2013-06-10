@@ -373,7 +373,7 @@ var bgzla = {
             lineWidth:4,
             renderer: $.jqplot.BarRenderer,
             rendererOptions:{barMargin: 30},
-            pointLabels:{show: true, stackedValue: true, edgeTolerance: -15}
+            pointLabels:{show: true, edgeTolerance: -15}
           }
         });
       }
