@@ -33,9 +33,6 @@ var GAIA = {
                      ],
         'product': 'Boot2Gecko'
   },
-  tef_params: null,
-  leo_params: null,
-  mine_params: null,
   dataRef: 'https://mozilla-bgzla.firebaseIO.com/flag/'
 };
 
@@ -106,6 +103,38 @@ var bgzla = {
 
     $('#koi_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#koi_panel');
+    });
+
+    GAIA.leoq_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.leoq_params['value0-0-0'] = 'leo?';
+    // blockers: tef+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.leoq_params, function(error, bugs) {
+      that.bug_handler_leoq(error, bugs);
+    });
+
+    $('#leoq_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#leoq_panel');
+    });
+
+    GAIA.hdq_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.hdq_params['value0-0-0'] = 'hd?';
+    // blockers: tef+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.hdq_params, function(error, bugs) {
+      that.bug_handler_hdq(error, bugs);
+    });
+
+    $('#leoq_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#leoq_panel');
+    });
+
+    GAIA.koiq_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.koiq_params['value0-0-0'] = 'koi?';
+    // blockers: tef+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.koiq_params, function(error, bugs) {
+      that.bug_handler_koiq(error, bugs);
+    });
+    $('#koiq_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#koiq_panel');
     });
 
     this.plot_trend();
@@ -274,6 +303,24 @@ var bgzla = {
     }
   },
 
+  bug_handler_leoq: function(error, bugs) {
+    if (!error) {
+      this.base_bug_handler(bugs, '#leoq_panel', '#leoq_cnt', '#leoq_nobody_cnt', 'leo?/');
+    }
+  },
+
+  bug_handler_hdq: function(error, bugs) {
+    if (!error) {
+      this.base_bug_handler(bugs, '#hdq_panel', '#hdq_cnt', '#hdq_nobody_cnt', 'hd?/');
+    }
+  },
+
+  bug_handler_koiq: function(error, bugs) {
+    if (!error) {
+      this.base_bug_handler(bugs, '#koiq_panel', '#koiq_cnt', '#koiq_nobody_cnt', 'koi?/');
+    }
+  },
+
   plot_trend: function() {
     var trend_1 = [];
     var trend_2 = [];
@@ -312,7 +359,7 @@ var bgzla = {
               renderer:$.jqplot.DateAxisRenderer,
               tickOptions: {
                 formatString:'%b %#d',
-                angle: -30
+                angle: -20
               },
               tickInterval: "1 day"
             }
@@ -325,8 +372,8 @@ var bgzla = {
           seriesDefaults: {
             lineWidth:4,
             renderer: $.jqplot.BarRenderer,
-            rendererOptions:{barMargin: 25},
-            pointLabels:{stackedValue: true}
+            rendererOptions:{barMargin: 30},
+            pointLabels:{show: true, stackedValue: true, edgeTolerance: -15}
           }
         });
       }
