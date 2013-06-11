@@ -47,8 +47,11 @@ var bgzla = {
       GAIA.my_email = value;
       // var mine_bugs;
       GAIA.mine_params = JSON.parse(JSON.stringify(GAIA.params));
+      GAIA.mine_last_params = JSON.parse(JSON.stringify(GAIA.params));
       delete GAIA.mine_params['value0-0-0'];
       delete GAIA.mine_params['component'];
+      delete GAIA.mine_last_params['value0-0-0'];
+      delete GAIA.mine_last_params['component'];
       if (GAIA.my_email !== null) {
         that.emit_myid_change();
       }
@@ -179,6 +182,10 @@ var bgzla = {
     if (HOT_FLAG) {
       item += ' (' + create_time.format('MM/DD') + ')';
     }
+
+    if (bug.status == 'RESOLVED') {
+      item += '<span class="label label-success">Resolved</span>'
+    }
     item += '</li>\n';
     return item;
   },
@@ -191,6 +198,7 @@ var bgzla = {
       //   mine_params['username'] = my_email;
       //   mine_params['password'] = my_password;
       // }
+      $('#email_id').text(GAIA.my_email);
       GAIA.mine_params['email1'] = GAIA.my_email;
       GAIA.mine_params['email1_assigned_to'] = 1;
       var that = this;
@@ -209,6 +217,27 @@ var bgzla = {
           $('#mine_panel').show();
         }
       });
+
+      // Find bugs assigned to you and last changed date is last monday.
+      GAIA.mine_last_params['email1'] = GAIA.my_email;
+      GAIA.mine_last_params['email1_assigned_to'] = 1;
+      GAIA.mine_last_params['chfieldfrom'] = moment().utc().day(-6).format('YYYY-MM-DD');
+      GAIA.mine_last_params['bug_status'] = [];
+      GAIA.bugzilla.searchBugs(GAIA.mine_last_params, function(error, bugs) {
+        if (!error) {
+          // console.log(bugs);
+          // mine_bugs = bugs;
+          var outcome = '<ul>';
+          bugs.sort(that.sorters.byIdDesc);
+          for (var i = 0; i < bugs.length; i++) {
+            outcome += that.format_bug(bugs[i]);
+          }
+          outcome += '</ul>';
+          $('#mine_last_panel').html(outcome);
+          $('#mine_last_cnt').text(bugs.length);
+          $('#mine_last_panel').show();
+        }
+      });      
   },
 
   emit_hot_cnt_change: function() {
