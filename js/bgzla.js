@@ -47,11 +47,13 @@ var bgzla = {
       GAIA.my_email = value;
       // var mine_bugs;
       GAIA.mine_params = JSON.parse(JSON.stringify(GAIA.params));
-      GAIA.mine_last_params = JSON.parse(JSON.stringify(GAIA.params));
       delete GAIA.mine_params['value0-0-0'];
       delete GAIA.mine_params['component'];
+
+      GAIA.mine_last_params = JSON.parse(JSON.stringify(GAIA.params));
       delete GAIA.mine_last_params['value0-0-0'];
       delete GAIA.mine_last_params['component'];
+
       if (GAIA.my_email !== null) {
         that.emit_myid_change();
       }
@@ -184,7 +186,7 @@ var bgzla = {
     }
 
     if (bug.status == 'RESOLVED') {
-      item += '<span class="label label-success">Resolved</span>'
+      item += ' <span class="label label-success">Resolved</span>';
     }
     item += '</li>\n';
     return item;
@@ -221,7 +223,8 @@ var bgzla = {
       // Find bugs assigned to you and last changed date is last monday.
       GAIA.mine_last_params['email1'] = GAIA.my_email;
       GAIA.mine_last_params['email1_assigned_to'] = 1;
-      GAIA.mine_last_params['chfieldfrom'] = moment().utc().day(-6).format('YYYY-MM-DD');
+      GAIA.mine_last_params['chfieldfrom'] =
+           moment().utc().day(-6).format('YYYY-MM-DD');
       GAIA.mine_last_params['bug_status'] = [];
       GAIA.bugzilla.searchBugs(GAIA.mine_last_params, function(error, bugs) {
         if (!error) {
@@ -237,7 +240,7 @@ var bgzla = {
           $('#mine_last_cnt').text(bugs.length);
           $('#mine_last_panel').show();
         }
-      });      
+      });
   },
 
   emit_hot_cnt_change: function() {
@@ -316,37 +319,43 @@ var bgzla = {
 
   bug_handler_tef: function(error, bugs) {
     if (!error) {
-      this.base_bug_handler(bugs, '#tef_panel', '#tef_cnt', '#tef_nobody_cnt', 'hd+/');
+      this.base_bug_handler(bugs,
+        '#tef_panel', '#tef_cnt', '#tef_nobody_cnt', 'hd+/');
     }
   },
 
   bug_handler_leo: function(error, bugs) {
     if (!error) {
-      this.base_bug_handler(bugs, '#leo_panel', '#leo_cnt', '#leo_nobody_cnt', 'leo+/');
+      this.base_bug_handler(bugs,
+        '#leo_panel', '#leo_cnt', '#leo_nobody_cnt', 'leo+/');
     }
   },
 
   bug_handler_koi: function(error, bugs) {
     if (!error) {
-      this.base_bug_handler(bugs, '#koi_panel', '#koi_cnt', '#koi_nobody_cnt', 'koi+/');
+      this.base_bug_handler(bugs,
+        '#koi_panel', '#koi_cnt', '#koi_nobody_cnt', 'koi+/');
     }
   },
 
   bug_handler_leoq: function(error, bugs) {
     if (!error) {
-      this.base_bug_handler(bugs, '#leoq_panel', '#leoq_cnt', '#leoq_nobody_cnt', 'leo?/');
+      this.base_bug_handler(bugs,
+        '#leoq_panel', '#leoq_cnt', '#leoq_nobody_cnt', 'leo?/');
     }
   },
 
   bug_handler_hdq: function(error, bugs) {
     if (!error) {
-      this.base_bug_handler(bugs, '#hdq_panel', '#hdq_cnt', '#hdq_nobody_cnt', 'hd?/');
+      this.base_bug_handler(bugs,
+        '#hdq_panel', '#hdq_cnt', '#hdq_nobody_cnt', 'hd?/');
     }
   },
 
   bug_handler_koiq: function(error, bugs) {
     if (!error) {
-      this.base_bug_handler(bugs, '#koiq_panel', '#koiq_cnt', '#koiq_nobody_cnt', 'koi?/');
+      this.base_bug_handler(bugs,
+        '#koiq_panel', '#koiq_cnt', '#koiq_nobody_cnt', 'koi?/');
     }
   },
 
@@ -361,18 +370,18 @@ var bgzla = {
         var data = snapshot.val();
         var subfix = ' 6:00AM';
         // console.log(that.data);
-        for(var i in data['leo ']) {
+        for (var i in data['leo ']) {
           trend_1.push([i + subfix, data['leo '][i]]);
         }
-        for(var i in data['hd ']) {
+        for (var i in data['hd ']) {
           trend_2.push([i + subfix, data['hd '][i]]);
         }
-        for(var i in data['koi ']) {
+        for (var i in data['koi ']) {
           trend_3.push([i + subfix, data['koi '][i]]);
         }
         // console.log(line1);
         var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3], {
-          title:'Daily Trend',
+          title: 'Daily Trend',
           stackSeries: true,
           legend: {
               renderer: $.jqplot.EnhancedLegendRenderer,
@@ -383,26 +392,26 @@ var bgzla = {
                 numberRows: 1
               }
           },
-          axes:{
-            xaxis:{
-              renderer:$.jqplot.DateAxisRenderer,
+          axes: {
+            xaxis: {
+              renderer: $.jqplot.DateAxisRenderer,
               tickOptions: {
-                formatString:'%b %#d',
+                formatString: '%b %#d',
                 angle: -20
               },
-              tickInterval: "1 day"
+              tickInterval: '1 day'
             }
           },
-          series:[
-            {label:'leo+'},
-            {label:'hd+'},
-            {label:'koi+'}
+          series: [
+            {label: 'leo+'},
+            {label: 'hd+'},
+            {label: 'koi+'}
           ],
           seriesDefaults: {
-            lineWidth:4,
+            lineWidth: 4,
             renderer: $.jqplot.BarRenderer,
-            rendererOptions:{},
-            pointLabels:{show: true, edgeTolerance: -15}
+            rendererOptions: {},
+            pointLabels: {show: true, edgeTolerance: -15}
           }
         });
       }
