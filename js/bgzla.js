@@ -146,7 +146,7 @@ var bgzla = {
   },
 
   // generate the item
-  format_bug: function(bug) {
+  format_bug: function(bug, mine_flag) {
     var HOT_FLAG = false;
     // find hot bugs
     var create_time = moment(bug.creation_time);
@@ -159,11 +159,14 @@ var bgzla = {
       INACTIVE_FLAG = true;
     }
 
-    // check if has assignee
-    var assignee = ' (' + bug.assigned_to.name + ')';
-    if (bug.assigned_to.name === 'nobody@mozilla.org') {
-      assignee = '';
+    if (!mine_flag) {
+      // check if has assignee
+      var assignee = ' (' + bug.assigned_to.name + ')';
+      if (bug.assigned_to.name === 'nobody@mozilla.org') {
+        assignee = '';
+      }
     }
+
     var item = '<li id="bug_' + bug.id;
     if (INACTIVE_FLAG) {
       item += '" class="inactive';
@@ -211,7 +214,7 @@ var bgzla = {
           var outcome = '<ul>';
           bugs.sort(that.sorters.byIdDesc);
           for (var i = 0; i < bugs.length; i++) {
-            outcome += that.format_bug(bugs[i]);
+            outcome += that.format_bug(bugs[i], true);
           }
           outcome += '</ul>';
           $('#mine_panel').html(outcome);
@@ -233,7 +236,7 @@ var bgzla = {
           var outcome = '<ul>';
           bugs.sort(that.sorters.byIdDesc);
           for (var i = 0; i < bugs.length; i++) {
-            outcome += that.format_bug(bugs[i]);
+            outcome += that.format_bug(bugs[i], true);
           }
           outcome += '</ul>';
           $('#mine_last_panel').html(outcome);
@@ -247,7 +250,7 @@ var bgzla = {
       var outcome = '<ul>';
       GAIA.hot_bugs.sort(this.sorters.byIdDesc);
       for (var i = 0; i < GAIA.hot_bugs.length; i++) {
-        outcome += this.format_bug(GAIA.hot_bugs[i]);
+        outcome += this.format_bug(GAIA.hot_bugs[i], false);
       }
       outcome += '</ul>';
       $('#hot_panel').hide();
@@ -295,7 +298,7 @@ var bgzla = {
       if (bugs[i].assigned_to.name === 'nobody@mozilla.org') {
         nobody_cnt += 1;
       }
-      outcome += this.format_bug(bugs[i]);
+      outcome += this.format_bug(bugs[i], false);
     }
     outcome += '</ul>';
     $(panel).html(outcome);
