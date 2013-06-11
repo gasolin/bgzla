@@ -282,8 +282,9 @@ var bgzla = {
 
   input_bugzilla_id: function() {
       GAIA.my_email = prompt('Enter your bugzilla email' +
-                        '(only stored in this browser):');
-      GAIA.my_password = prompt('Enter your password can show secret bugs:');
+                        ' (only stored in this browser):');
+      GAIA.my_password = prompt('Enter bugzilla password to show ' +
+        'confidential bugs, or just press OK button:');
       if (GAIA.my_email !== null || GAIA.my_email !== undefined) {
         console.log('default account changed to ' + GAIA.my_email);
         asyncStorage.setItem('my_email', GAIA.my_email);
