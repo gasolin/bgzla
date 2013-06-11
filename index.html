@@ -50,14 +50,14 @@
       <li><a href="#custom" data-toggle="tab">Personal</a></li>
     </ul>
     <div class="tab-content">
+
       <div class="tab-pane" id="custom">
         <div class="container-fluid">
-          <h3>Mine <small id="email_id"></small></h3>
+          <h3>Mine <small id="email_id"></small> <small><a href="#" id="my_id"><i class='icon icon-wrench'></i> Configure</a></small></h3>
           <div class="span6">
             <div id="mine_zone" class="well well-large">
               <h3>This week <i class='icon-smile'></i> </h3><h1 id="mine_cnt"></h1>
               <section id="mine_panel"></section>
-              <span class="pull-right"><a href="#" id="my_id"><i class='icon icon-wrench'></i> Configure</a></span>
             </div>
           </div>
            <div class="span6">
@@ -68,9 +68,14 @@
           </div>
         </div>
       </div>
+
       <div class="tab-pane active" id="overview">
         <div class="container">
-      	  <div class="row-fluid">
+          <div class="row">
+            <div class="span4">
+              <div class="well well-large" id='daily_trend' style='height: 300px;'>
+              </div>
+            </div>
             <div class="span4">
               <div id="hot_zone" class="well well-large">
                 <h3>Created in a week <i class='icon-rocket'></i> </h3><h1 id="hot_cnt"></h1>
@@ -96,10 +101,6 @@
                 <h3>koi+ <span id="koi_nobody_cnt" class="label label-info"></span></h3>
                 <h1 id="koi_cnt"></h1>
                 <section id="koi_panel"></section>
-              </div>
-            </div>
-            <div class="span4">
-              <div class="well well-large" id='daily_trend' style='height: 300px;'>
               </div>
             </div>
             <div class="span4">
