@@ -10,7 +10,8 @@ var GAIA = {
   lastest: moment().day(-7),
   inactive: moment().day(-4),
   hot_bugs: [],
-  my_email: '',
+  my_email: null,
+  my_password: null,
   bugzilla: null,
   params: {
         'username': 'autonome+bztest@gmail.com',
@@ -67,8 +68,6 @@ var bgzla = {
         that.emit_myid_change();
       }
     });
-    // var my_password = localStorage.my_password || null;
-
     $('#my_id').click(this.input_bugzilla_id.bind(this));
 
     $('#mine_cnt').bind('touchstart mousedown', function(event) {
@@ -210,13 +209,15 @@ var bgzla = {
   },
 
   emit_myid_change: function() {
-      // console.log('fetch ' + my_email + '/' + my_password);
+      console.log('fetch ' + GAIA.my_email + '/' + GAIA.my_password);
 
       // use personal auth
-      // if (my_email!==null && my_password!==null) {
-      //   mine_params['username'] = my_email;
-      //   mine_params['password'] = my_password;
-      // }
+      if (GAIA.my_email !== null &&
+          GAIA.my_password !== null &&
+          GAIA.my_password !== undefined) {
+        GAIA.mine_params['username'] = GAIA.my_email;
+        GAIA.mine_params['password'] = GAIA.my_password;
+      }
       $('#email_id').text(GAIA.my_email);
       GAIA.mine_params['email1'] = GAIA.my_email;
       GAIA.mine_params['email1_assigned_to'] = 1;
@@ -238,6 +239,11 @@ var bgzla = {
       });
 
       // Find bugs assigned to you and changed last week.
+      // use personal auth
+      if (GAIA.my_email!==null && GAIA.my_password!==null) {
+        GAIA.mine_params['username'] = GAIA.my_email;
+        GAIA.mine_params['password'] = GAIA.my_password;
+      }
       GAIA.mine_last_params['email1'] = GAIA.my_email;
       GAIA.mine_last_params['email1_assigned_to'] = 1;
       GAIA.mine_last_params['changed_after'] =
@@ -277,11 +283,13 @@ var bgzla = {
   input_bugzilla_id: function() {
       GAIA.my_email = prompt('Enter your bugzilla email' +
                         '(only stored in this browser):');
-      // my_password = prompt('Enter your password can show secret bugs:');
-      if (GAIA.my_email !== '') {
+      GAIA.my_password = prompt('Enter your password can show secret bugs:');
+      if (GAIA.my_email !== null || GAIA.my_email !== undefined) {
         console.log('default account changed to ' + GAIA.my_email);
         asyncStorage.setItem('my_email', GAIA.my_email);
-        // localStorage.my_password = my_password;
+        if (GAIA.my_password !== null || GAIA.my_password !== undefined) {
+          asyncStorage.setItem('my_password', GAIA.my_password);
+        }
         this.emit_myid_change();
       } else {
         alert('account not changed');
