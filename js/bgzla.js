@@ -159,12 +159,10 @@ var bgzla = {
       INACTIVE_FLAG = true;
     }
 
-    if (!mine_flag) {
-      // check if has assignee
-      var assignee = ' (' + bug.assigned_to.name + ')';
-      if (bug.assigned_to.name === 'nobody@mozilla.org') {
-        assignee = '';
-      }
+    // check if has assignee
+    var assignee = ' (' + bug.assigned_to.name + ')';
+    if (bug.assigned_to.name === 'nobody@mozilla.org') {
+      assignee = '';
     }
 
     var item = '<li id="bug_' + bug.id;
@@ -178,7 +176,11 @@ var bgzla = {
     item += '[<a href="http://bugzil.la/' + bug.id + '" target="_blank">' +
             bug.id + '</a>] ';
     if (assignee !== '') {
-      item += bug.summary + assignee;
+      if (!mine_flag) {
+        item += bug.summary + assignee;
+      } else {
+        item += bug.summary;
+      }
     } else {
       item += '<em>' + bug.summary + '</em>';
     }
