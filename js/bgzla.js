@@ -28,8 +28,8 @@ var GAIA = {
                       'Gaia::First Time Experience', 'Gaia::FMRadio',
                       'Gaia::Gallery', 'Gaia::Homescreen',
                       'Gaia::Keyboard', 'Gaia::Music', 'Gaia::PDF Viewer',
-                      'Gaia::Settings', 'Gaia::SMS', 'Gaia::System::Lockscreen',
-                      'Gaia::Video', 'General'
+                      'Gaia::Settings', 'Gaia::SMS', 'Gaia::System',
+                      'Gaia::System::Lockscreen', 'Gaia::Video', 'General'
                      ],
         'product': 'Boot2Gecko'
   },
