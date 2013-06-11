@@ -215,7 +215,7 @@ var bgzla = {
           // console.log(bugs);
           // mine_bugs = bugs;
           var outcome = '<ul>';
-          bugs.sort(that.sorters.byIdDesc);
+          bugs.sort(that.sorters.byLastChangeTime);
           for (var i = 0; i < bugs.length; i++) {
             outcome += that.format_bug(bugs[i], true);
           }
@@ -237,7 +237,7 @@ var bgzla = {
           // console.log(bugs);
           // mine_bugs = bugs;
           var outcome = '<ul>';
-          bugs.sort(that.sorters.byIdDesc);
+          bugs.sort(that.sorters.byLastChangeTime);
           for (var i = 0; i < bugs.length; i++) {
             outcome += that.format_bug(bugs[i], true);
           }
@@ -428,6 +428,11 @@ var bgzla = {
   sorters: {
       byIdDesc: function(a, b) {
           return (b.id - a.id);
+      },
+      byLastChangeTime: function(a, b) {
+        var a_last = moment(a.last_change_time);
+        var b_last = moment(b.last_change_time);
+        return a_last.isBefore(b_last);
       }
   }
 };
