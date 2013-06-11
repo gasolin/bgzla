@@ -48,11 +48,20 @@ var bgzla = {
       // var mine_bugs;
       GAIA.mine_params = JSON.parse(JSON.stringify(GAIA.params));
       delete GAIA.mine_params['value0-0-0'];
+      delete GAIA.mine_params['field0-0-0'];
+      delete GAIA.mine_params['type0-0-0'];
+      delete GAIA.mine_params['field1-0-0'];
+      delete GAIA.mine_params['type1-0-0'];
       delete GAIA.mine_params['component'];
 
       GAIA.mine_last_params = JSON.parse(JSON.stringify(GAIA.params));
       delete GAIA.mine_last_params['value0-0-0'];
+      delete GAIA.mine_last_params['field0-0-0'];
+      delete GAIA.mine_last_params['type0-0-0'];
+      delete GAIA.mine_last_params['field1-0-0'];
+      delete GAIA.mine_last_params['type1-0-0'];
       delete GAIA.mine_last_params['component'];
+      delete GAIA.mine_last_params['bug_status'];
 
       if (GAIA.my_email !== null) {
         that.emit_myid_change();
@@ -190,7 +199,7 @@ var bgzla = {
       item += ' (' + create_time.format('MM/DD') + ')';
     }
 
-    if (bug.status == 'RESOLVED') {
+    if (bug.status == 'RESOLVED' || bug.status == 'VERIFIED') {
       item += ' <span class="label label-success">Resolved</span>';
     }
     if (INACTIVE_FLAG) {
@@ -228,11 +237,13 @@ var bgzla = {
         }
       });
 
-      // Find bugs assigned to you and last changed date is last monday.
+      // Find bugs assigned to you and changed last week.
       GAIA.mine_last_params['email1'] = GAIA.my_email;
       GAIA.mine_last_params['email1_assigned_to'] = 1;
-      GAIA.mine_last_params['chfieldfrom'] =
-           moment().utc().day(-6).format('YYYY-MM-DD');
+      GAIA.mine_last_params['changed_after'] =
+           moment().utc().day(-7).format('YYYY-MM-DD');
+      GAIA.mine_last_params['changed_before'] =
+           moment().utc().day(-1).format('YYYY-MM-DD');
       GAIA.mine_last_params['bug_status'] = [];
       GAIA.bugzilla.searchBugs(GAIA.mine_last_params, function(error, bugs) {
         if (!error) {
