@@ -168,9 +168,9 @@ var bgzla = {
     }
 
     var item = '<li id="bug_' + bug.id;
-    if (INACTIVE_FLAG) {
-      item += '" class="inactive';
-    }
+    // if (INACTIVE_FLAG) {
+    //   item += '" class="inactive';
+    // }
     item += '">';
     if (HOT_FLAG) {
       item += '<i class="icon-rocket"></i> ';
@@ -190,6 +190,9 @@ var bgzla = {
 
     if (bug.status == 'RESOLVED') {
       item += ' <span class="label label-success">Resolved</span>';
+    }
+    if (INACTIVE_FLAG) {
+      item += ' <span class="label label-warning">inactive</span>';
     }
     item += '</li>\n';
     return item;
