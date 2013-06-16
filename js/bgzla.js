@@ -427,7 +427,7 @@ var bgzla = {
                 formatString: '%b %#d',
                 angle: -20
               },
-              tickInterval: '1 day'
+              tickInterval: '5 day'
             }
           },
           series: [
