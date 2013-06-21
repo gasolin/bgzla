@@ -72,6 +72,7 @@ var bgzla = {
         that.emit_myid_change();
       }
     });
+    $('#bgtodo').hide();
     $('#my_id').click(this.input_bugzilla_id.bind(this));
 
     $('#mine_cnt').bind('touchstart mousedown', function(event) {
@@ -223,6 +224,9 @@ var bgzla = {
         GAIA.mine_params['password'] = GAIA.my_password;
       }
       $('#email_id').text(GAIA.my_email);
+      $('#bgtodo').show();
+      $('#bgtodo').attr('href',
+        'http://harthur.github.io/bugzilla-todos/?email=' + GAIA.my_email);
       GAIA.mine_params['email1'] = GAIA.my_email;
       GAIA.mine_params['email1_assigned_to'] = 1;
       var that = this;
@@ -244,7 +248,7 @@ var bgzla = {
 
       // Find bugs assigned to you and changed last week.
       // use personal auth
-      if (GAIA.my_email!==null && GAIA.my_password!==null) {
+      if (GAIA.my_email !== null && GAIA.my_password !== null) {
         GAIA.mine_params['username'] = GAIA.my_email;
         GAIA.mine_params['password'] = GAIA.my_password;
       }
