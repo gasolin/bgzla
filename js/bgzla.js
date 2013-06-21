@@ -63,6 +63,10 @@ var bgzla = {
       delete GAIA.mine_last_params['type1-0-0'];
       delete GAIA.mine_last_params['component'];
       delete GAIA.mine_last_params['bug_status'];
+      GAIA.mine_last_params['changed_after'] =
+           moment().utc().day(-7).format('YYYY-MM-DD');
+      GAIA.mine_last_params['changed_before'] =
+           moment().utc().day(1).format('YYYY-MM-DD');
 
       if (GAIA.my_email !== null) {
         that.emit_myid_change();
@@ -136,8 +140,8 @@ var bgzla = {
       that.bug_handler_hdq(error, bugs);
     });
 
-    $('#leoq_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#leoq_panel');
+    $('#hdq_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#hdq_panel');
     });
 
     GAIA.koiq_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -181,8 +185,8 @@ var bgzla = {
     if (HOT_FLAG) {
       item += '<i class="icon-rocket"></i> ';
     }
-    item += '[<a href="http://bugzil.la/' + bug.id + '" target="_blank">' +
-            bug.id + '</a>] ';
+    item += '<a href="http://bugzil.la/' + bug.id + '" target="_blank">' +
+            bug.id + '</a> - ';
     if (assignee !== '') {
       if (!mine_flag) {
         item += bug.summary + assignee;
@@ -246,11 +250,6 @@ var bgzla = {
       }
       GAIA.mine_last_params['email1'] = GAIA.my_email;
       GAIA.mine_last_params['email1_assigned_to'] = 1;
-      GAIA.mine_last_params['changed_after'] =
-           moment().utc().day(-7).format('YYYY-MM-DD');
-      GAIA.mine_last_params['changed_before'] =
-           moment().utc().day(-1).format('YYYY-MM-DD');
-      GAIA.mine_last_params['bug_status'] = [];
       GAIA.bugzilla.searchBugs(GAIA.mine_last_params, function(error, bugs) {
         if (!error) {
           // console.log(bugs);
