@@ -284,20 +284,33 @@ var bgzla = {
   },
 
   input_bugzilla_id: function() {
-      GAIA.my_email = prompt('Enter your bugzilla email' +
-                        ' (only stored in this browser):');
-      GAIA.my_password = prompt('Enter bugzilla password to show ' +
-        'confidential bugs, or just press OK button:');
-      if (GAIA.my_email !== null || GAIA.my_email !== undefined) {
-        console.log('default account changed to ' + GAIA.my_email);
-        asyncStorage.setItem('my_email', GAIA.my_email);
-        if (GAIA.my_password !== null || GAIA.my_password !== undefined) {
-          asyncStorage.setItem('my_password', GAIA.my_password);
+    var self = this;
+    var pRef = new Firebase('https://mozilla-bgzla.firebaseIO.com');
+    var authClient = new FirebaseAuthClient(pRef, function(error, user) {
+      if (error) {
+        // an error occurred while attempting login
+        alert(error);
+      } else if (user) {
+        // user authenticated with Firebase
+        // alert('User ID: ' + user.id + ', Provider: ' + user.provider);
+        GAIA.my_email = user.email;
+        // GAIA.my_password = prompt('Enter bugzilla password to show ' +
+        // 'confidential bugs, or just press OK button:');
+        if (GAIA.my_email !== null || GAIA.my_email !== undefined) {
+          console.log('default account changed to ' + GAIA.my_email);
+          asyncStorage.setItem('my_email', GAIA.my_email);
+          if (GAIA.my_password !== null || GAIA.my_password !== undefined) {
+            asyncStorage.setItem('my_password', GAIA.my_password);
+          }
+          self.emit_myid_change();
+        } else {
+          alert('account not changed');
         }
-        this.emit_myid_change();
       } else {
-        alert('account not changed');
+        // user is logged out
       }
+    });
+    authClient.login('persona');
   },
 
   toggle_panel: function(event, panel_id) {
