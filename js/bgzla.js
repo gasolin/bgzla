@@ -292,7 +292,7 @@ var bgzla = {
 
   emit_peer1_change: function() {
       console.log('fetch ' + GAIA.peer1_email);
-      $('#email_id').text(GAIA.peer1_email);
+      $('#peer1_id').text(GAIA.peer1_email);
       // $('#bgtodo').show();
       // $('#bgtodo').attr('href',
       //   'http://harthur.github.io/bugzilla-todos/?email=' + GAIA.peer1_email);
