@@ -12,6 +12,7 @@ var GAIA = {
   hot_bugs: [],
   my_email: null,
   my_password: null,
+  peer1_email: null,
   bugzilla: null,
   params: {
         'username': 'autonome+bztest@gmail.com',
@@ -72,8 +73,26 @@ var bgzla = {
         that.emit_myid_change();
       }
     });
+
+    asyncStorage.getItem('peer1_email', function(value) {
+      GAIA.peer1_email = value;
+
+      GAIA.peer1_params = JSON.parse(JSON.stringify(GAIA.params));
+      delete GAIA.mine_params['value0-0-0'];
+      delete GAIA.mine_params['field0-0-0'];
+      delete GAIA.mine_params['type0-0-0'];
+      delete GAIA.mine_params['field1-0-0'];
+      delete GAIA.mine_params['type1-0-0'];
+      delete GAIA.mine_params['component'];
+
+      if (GAIA.peer1_email !== null) {
+        that.emit_peer1_change();
+      }
+    });
+
     $('#bgtodo').hide();
-    $('#my_id').click(this.input_bugzilla_id.bind(this));
+    $('#my_id').click(this.auth_persona_id.bind(this));
+    $('#peer1_id').click(this.input_bugzilla_id.bind(this));
 
     $('#mine_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#mine_panel');
@@ -271,6 +290,32 @@ var bgzla = {
       });
   },
 
+  emit_peer1_change: function() {
+      console.log('fetch ' + GAIA.peer1_email);
+      $('#email_id').text(GAIA.peer1_email);
+      // $('#bgtodo').show();
+      // $('#bgtodo').attr('href',
+      //   'http://harthur.github.io/bugzilla-todos/?email=' + GAIA.peer1_email);
+      GAIA.peer1_params['email1'] = GAIA.peer1_email;
+      GAIA.peer1_params['email1_assigned_to'] = 1;
+      var that = this;
+      GAIA.bugzilla.searchBugs(GAIA.peer1_params, function(error, bugs) {
+        if (!error) {
+          // console.log(bugs);
+          // mine_bugs = bugs;
+          var outcome = '<ul>';
+          bugs.sort(that.sorters.byLastChangeTime);
+          for (var i = 0; i < bugs.length; i++) {
+            outcome += that.format_bug(bugs[i], true);
+          }
+          outcome += '</ul>';
+          $('#peer1_panel').html(outcome);
+          $('#peer1_cnt').text(bugs.length);
+          $('#peer1_panel').show();
+        }
+      });
+  },
+
   emit_hot_cnt_change: function() {
       var outcome = '<ul>';
       GAIA.hot_bugs.sort(this.sorters.byIdDesc);
@@ -284,6 +329,16 @@ var bgzla = {
   },
 
   input_bugzilla_id: function() {
+    GAIA.peer1_email = prompt('Enter your bugzilla email' +
+                           ' (only stored in this browser):');
+    if (GAIA.peer1_email !== null || GAIA.peer1_email !== undefined) {
+      console.log('peer1 account changed to ' + GAIA.peer1_email);
+      asyncStorage.setItem('peer1_email', GAIA.peer1_email);
+    }
+    this.emit_peer1_change();
+  },
+
+  auth_persona_id: function() {
     var self = this;
     var pRef = new Firebase('https://mozilla-bgzla.firebaseIO.com');
     var authClient = new FirebaseAuthClient(pRef, function(error, user) {
