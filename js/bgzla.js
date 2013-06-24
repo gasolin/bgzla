@@ -13,6 +13,7 @@ var GAIA = {
   my_email: null,
   my_password: null,
   peer1_email: null,
+  peer2_email: null,
   bugzilla: null,
   params: {
         'username': 'autonome+bztest@gmail.com',
@@ -78,21 +79,38 @@ var bgzla = {
       GAIA.peer1_email = value;
 
       GAIA.peer1_params = JSON.parse(JSON.stringify(GAIA.params));
-      delete GAIA.mine_params['value0-0-0'];
-      delete GAIA.mine_params['field0-0-0'];
-      delete GAIA.mine_params['type0-0-0'];
-      delete GAIA.mine_params['field1-0-0'];
-      delete GAIA.mine_params['type1-0-0'];
-      delete GAIA.mine_params['component'];
+      delete GAIA.peer1_params['value0-0-0'];
+      delete GAIA.peer1_params['field0-0-0'];
+      delete GAIA.peer1_params['type0-0-0'];
+      delete GAIA.peer1_params['field1-0-0'];
+      delete GAIA.peer1_params['type1-0-0'];
+      delete GAIA.peer1_params['component'];
 
       if (GAIA.peer1_email !== null) {
         that.emit_peer1_change();
       }
     });
 
+    asyncStorage.getItem('peer2_email', function(value) {
+      GAIA.peer2_email = value;
+
+      GAIA.peer2_params = JSON.parse(JSON.stringify(GAIA.params));
+      delete GAIA.peer2_params['value0-0-0'];
+      delete GAIA.peer2_params['field0-0-0'];
+      delete GAIA.peer2_params['type0-0-0'];
+      delete GAIA.peer2_params['field1-0-0'];
+      delete GAIA.peer2_params['type1-0-0'];
+      delete GAIA.peer2_params['component'];
+
+      if (GAIA.peer2_email !== null) {
+        that.emit_peer2_change();
+      }
+    });
+
     $('#bgtodo').hide();
     $('#my_id').click(this.auth_persona_id.bind(this));
     $('#peer1_id').click(this.input_bugzilla_id.bind(this));
+    $('#peer2_id').click(this.input_bugzilla_peer2_id.bind(this));
 
     $('#mine_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#mine_panel');
@@ -292,7 +310,7 @@ var bgzla = {
 
   emit_peer1_change: function() {
       console.log('fetch ' + GAIA.peer1_email);
-      $('#peer1_id').text(GAIA.peer1_email);
+      $('#peer1_email_id').text(GAIA.peer1_email);
       // $('#bgtodo').show();
       // $('#bgtodo').attr('href',
       //   'http://harthur.github.io/bugzilla-todos/?email=' + GAIA.peer1_email);
@@ -316,6 +334,32 @@ var bgzla = {
       });
   },
 
+  emit_peer2_change: function() {
+      console.log('fetch ' + GAIA.peer2_email);
+      $('#peer2_email_id').text(GAIA.peer2_email);
+      // $('#bgtodo').show();
+      // $('#bgtodo').attr('href',
+      //   'http://harthur.github.io/bugzilla-todos/?email=' + GAIA.peer1_email);
+      GAIA.peer2_params['email1'] = GAIA.peer2_email;
+      GAIA.peer2_params['email1_assigned_to'] = 1;
+      var that = this;
+      GAIA.bugzilla.searchBugs(GAIA.peer2_params, function(error, bugs) {
+        if (!error) {
+          // console.log(bugs);
+          // mine_bugs = bugs;
+          var outcome = '<ul>';
+          bugs.sort(that.sorters.byLastChangeTime);
+          for (var i = 0; i < bugs.length; i++) {
+            outcome += that.format_bug(bugs[i], true);
+          }
+          outcome += '</ul>';
+          $('#peer2_panel').html(outcome);
+          $('#peer2_cnt').text(bugs.length);
+          $('#peer2_panel').show();
+        }
+      });
+  },
+
   emit_hot_cnt_change: function() {
       var outcome = '<ul>';
       GAIA.hot_bugs.sort(this.sorters.byIdDesc);
@@ -328,14 +372,24 @@ var bgzla = {
       $('#hot_cnt').text(GAIA.hot_bugs.length);
   },
 
-  input_bugzilla_id: function() {
-    GAIA.peer1_email = prompt('Enter your bugzilla email' +
+  input_bugzilla_id: function(peer) {
+    GAIA.peer1_email = prompt('Enter peer bugzilla email' +
                            ' (only stored in this browser):');
     if (GAIA.peer1_email !== null || GAIA.peer1_email !== undefined) {
       console.log('peer1 account changed to ' + GAIA.peer1_email);
       asyncStorage.setItem('peer1_email', GAIA.peer1_email);
     }
     this.emit_peer1_change();
+  },
+
+  input_bugzilla_peer2_id: function(peer) {    
+    GAIA.peer2_email = prompt('Enter peer bugzilla email' +
+                           ' (only stored in this browser):');
+    if (GAIA.peer2_email !== null || GAIA.peer2_email !== undefined) {
+      console.log('peer2 account changed to ' + GAIA.peer2_email);
+      asyncStorage.setItem('peer2_email', GAIA.peer2_email);
+    }
+    this.emit_peer2_change();
   },
 
   auth_persona_id: function() {
