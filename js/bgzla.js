@@ -564,7 +564,14 @@ var bgzla = {
             lineWidth: 4,
             renderer: $.jqplot.BarRenderer,
             rendererOptions: {},
-            pointLabels: {show: true, edgeTolerance: -15}
+            // pointLabels: {show: true, edgeTolerance: -15}
+          },
+          highlighter: {
+            show: true,
+            sizeAdjust: 7.5
+          },
+          cursor: {
+            show: true
           }
         });
       }
