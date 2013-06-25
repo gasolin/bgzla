@@ -561,9 +561,10 @@ var bgzla = {
             {label: 'koi+'}
           ],
           seriesDefaults: {
-            lineWidth: 4,
-            renderer: $.jqplot.BarRenderer,
-            rendererOptions: {},
+            fill: true
+            // lineWidth: 4,
+            // renderer: $.jqplot.BarRenderer,
+            // rendererOptions: {},
             // pointLabels: {show: true, edgeTolerance: -15}
           },
           highlighter: {
