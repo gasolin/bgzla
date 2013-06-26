@@ -552,7 +552,8 @@ var bgzla = {
                 formatString: '%b %#d',
                 angle: -20
               },
-              tickInterval: '5 day'
+              drawMajorGridlines: false,
+              tickInterval: '4 day'
             }
           },
           series: [
