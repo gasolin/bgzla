@@ -553,7 +553,7 @@ var bgzla = {
                 angle: -20
               },
               drawMajorGridlines: false,
-              tickInterval: '4 day'
+              tickInterval: '7 day'
             }
           },
           series: [
