@@ -523,14 +523,21 @@ var bgzla = {
         var data = snapshot.val();
         var subfix = ' 6:00AM';
         // console.log(that.data);
+        var fence = moment().day(-46);
         for (var i in data['leo ']) {
-          trend_1.push([i + subfix, data['leo '][i]]);
+          if(moment(i, "YYYY-MM-DD").isAfter(fence)){
+            trend_1.push([i + subfix, data['leo '][i]]);
+          }
         }
         for (var i in data['hd ']) {
-          trend_2.push([i + subfix, data['hd '][i]]);
+          if(moment(i, "YYYY-MM-DD").isAfter(fence)){
+            trend_2.push([i + subfix, data['hd '][i]]);
+          }
         }
         for (var i in data['koi ']) {
-          trend_3.push([i + subfix, data['koi '][i]]);
+          if(moment(i, "YYYY-MM-DD").isAfter(fence)){
+            trend_3.push([i + subfix, data['koi '][i]]);
+          }
         }
         // console.log(line1);
         var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3], {
