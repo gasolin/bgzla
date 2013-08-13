@@ -108,7 +108,8 @@ var bgzla = {
     });
 
     $('#bgtodo').hide();
-    $('#my_id').click(this.auth_persona_id.bind(this));
+    // $('#my_id').click(this.auth_persona_id.bind(this));
+    $('#my_id').click(this.input_bugzilla_my_id.bind(this));
     $('#peer1_id').click(this.input_bugzilla_id.bind(this));
     $('#peer2_id').click(this.input_bugzilla_peer2_id.bind(this));
 
@@ -390,6 +391,20 @@ var bgzla = {
       asyncStorage.setItem('peer2_email', GAIA.peer2_email);
     }
     this.emit_peer2_change();
+  },
+
+  input_bugzilla_my_id: function(peer) {
+    GAIA.my_email = prompt('Enter my bugzilla email' +
+                           ' (only stored in this browser):');
+    if (GAIA.my_email !== null || GAIA.my_email !== undefined) {
+      console.log('my account changed to ' + GAIA.my_email);
+      asyncStorage.setItem('peer2_email', GAIA.my_email);
+      GAIA.my_password = prompt('Enter my bugzilla password:');
+      if (GAIA.my_password !== null || GAIA.my_password !== undefined) {
+        asyncStorage.setItem('my_password', GAIA.my_password);
+      }
+    }
+    this.emit_myid_change();
   },
 
   auth_persona_id: function() {
