@@ -113,10 +113,6 @@ var bgzla = {
     $('#peer1_id').click(this.input_bugzilla_id.bind(this));
     $('#peer2_id').click(this.input_bugzilla_peer2_id.bind(this));
 
-    $('#mine_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#mine_panel');
-    });
-
     $('#hot_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#hot_panel');
     });
