@@ -121,10 +121,34 @@ var bgzla = {
       location.reload();
     });
 
-    // var tef_bugs;
+    // var 13_bugs;
+    GAIA.v13_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.v13_params['value0-0-0'] = '1.3+';
+    // blockers: tef+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.v13_params, function(error, bugs) {
+      that.bug_handler_13(error, bugs);
+    });
+
+    $('#13_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#13_panel');
+    });
+
+    // var 13q_bugs;
+    GAIA.v13q_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.v13q_params['value0-0-0'] = '1.3?';
+    // blockers: tef+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.v13q_params, function(error, bugs) {
+      that.bug_handler_13q(error, bugs);
+    });
+
+    $('#13q_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#13q_panel');
+    });
+
+    // var hd_bugs;
     GAIA.tef_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.tef_params['value0-0-0'] = 'hd+';
-    // blockers: tef+, not npotb
+    // blockers: hd+, not npotb
     GAIA.bugzilla.searchBugs(GAIA.tef_params, function(error, bugs) {
       that.bug_handler_tef(error, bugs);
     });
@@ -481,6 +505,13 @@ var bgzla = {
     });
   },
 
+  bug_handler_13: function(error, bugs) {
+    if (!error) {
+      this.base_bug_handler(bugs,
+        '#13_panel', '#13_cnt', '#13_nobody_cnt', '13+/');
+    }
+  },
+
   bug_handler_tef: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
@@ -499,6 +530,13 @@ var bgzla = {
     if (!error) {
       this.base_bug_handler(bugs,
         '#koi_panel', '#koi_cnt', '#koi_nobody_cnt', 'koi+/');
+    }
+  },
+
+  bug_handler_13q: function(error, bugs) {
+    if (!error) {
+      this.base_bug_handler(bugs,
+        '#13q_panel', '#13q_cnt', '#13q_nobody_cnt', '13?/');
     }
   },
 
@@ -527,6 +565,7 @@ var bgzla = {
     var trend_1 = [];
     var trend_2 = [];
     var trend_3 = [];
+    var trend_4 = [];
 
     var tefRef = new Firebase(GAIA.dataRef);
     tefRef.on('value', function(snapshot) {
@@ -550,8 +589,13 @@ var bgzla = {
             trend_3.push([i + subfix, data['koi '][i]]);
           }
         }
+        for (var i in data['1.3 ']) {
+          if(moment(i, "YYYY-MM-DD").isAfter(fence)){
+            trend_3.push([i + subfix, data['1.3 '][i]]);
+          }
+        }
         // console.log(line1);
-        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3], {
+        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3, trend_4], {
           title: 'Daily Trend',
           stackSeries: true,
           legend: {
@@ -577,7 +621,8 @@ var bgzla = {
           series: [
             {label: 'leo+'},
             {label: 'hd+'},
-            {label: 'koi+'}
+            {label: 'koi+'},
+            {label: '1.3+'}
           ],
           seriesDefaults: {
             fill: true
