@@ -34,7 +34,7 @@ var GAIA = {
                       'Gaia::Settings', 'Gaia::SMS', 'Gaia::System',
                       'Gaia::System::Lockscreen', 'Gaia::Video', 'General'
                      ],
-        'product': 'Boot2Gecko'
+        'product': 'Firefox OS'
   },
   dataRef: 'https://mozilla-bgzla.firebaseIO.com/flag/'
 };
