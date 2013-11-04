@@ -591,7 +591,7 @@ var bgzla = {
         }
         for (var i in data['1.3 ']) {
           if(moment(i, "YYYY-MM-DD").isAfter(fence)){
-            trend_3.push([i + subfix, data['1.3 '][i]]);
+            trend_4.push([i + subfix, data['1.3 '][i]]);
           }
         }
         // console.log(line1);
