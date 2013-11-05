@@ -158,16 +158,16 @@ var bgzla = {
     });
 
     // var leo_bugs;
-    GAIA.leo_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.leo_params['value0-0-0'] = 'leo+';
-    // blockers: leo+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.leo_params, function(error, bugs) {
-      that.bug_handler_leo(error, bugs);
-    });
+    // GAIA.leo_params = JSON.parse(JSON.stringify(GAIA.params));
+    // GAIA.leo_params['value0-0-0'] = 'leo+';
+    // // blockers: leo+, not npotb
+    // GAIA.bugzilla.searchBugs(GAIA.leo_params, function(error, bugs) {
+    //   that.bug_handler_leo(error, bugs);
+    // });
 
-    $('#leo_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#leo_panel');
-    });
+    // $('#leo_cnt').bind('touchstart mousedown', function(event) {
+    //   that.toggle_panel(event, '#leo_panel');
+    // });
 
     // var koi_bugs;
     GAIA.koi_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -181,16 +181,16 @@ var bgzla = {
       that.toggle_panel(event, '#koi_panel');
     });
 
-    GAIA.leoq_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.leoq_params['value0-0-0'] = 'leo?';
-    // blockers: tef+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.leoq_params, function(error, bugs) {
-      that.bug_handler_leoq(error, bugs);
-    });
+    // GAIA.leoq_params = JSON.parse(JSON.stringify(GAIA.params));
+    // GAIA.leoq_params['value0-0-0'] = 'leo?';
+    // // blockers: tef+, not npotb
+    // GAIA.bugzilla.searchBugs(GAIA.leoq_params, function(error, bugs) {
+    //   that.bug_handler_leoq(error, bugs);
+    // });
 
-    $('#leoq_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#leoq_panel');
-    });
+    // $('#leoq_cnt').bind('touchstart mousedown', function(event) {
+    //   that.toggle_panel(event, '#leoq_panel');
+    // });
 
     GAIA.hdq_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.hdq_params['value0-0-0'] = 'hd?';
@@ -519,12 +519,12 @@ var bgzla = {
     }
   },
 
-  bug_handler_leo: function(error, bugs) {
-    if (!error) {
-      this.base_bug_handler(bugs,
-        '#leo_panel', '#leo_cnt', '#leo_nobody_cnt', 'leo+/');
-    }
-  },
+  // bug_handler_leo: function(error, bugs) {
+  //   if (!error) {
+  //     this.base_bug_handler(bugs,
+  //       '#leo_panel', '#leo_cnt', '#leo_nobody_cnt', 'leo+/');
+  //   }
+  // },
 
   bug_handler_koi: function(error, bugs) {
     if (!error) {
@@ -540,12 +540,12 @@ var bgzla = {
     }
   },
 
-  bug_handler_leoq: function(error, bugs) {
-    if (!error) {
-      this.base_bug_handler(bugs,
-        '#leoq_panel', '#leoq_cnt', '#leoq_nobody_cnt', 'leo?/');
-    }
-  },
+  // bug_handler_leoq: function(error, bugs) {
+  //   if (!error) {
+  //     this.base_bug_handler(bugs,
+  //       '#leoq_panel', '#leoq_cnt', '#leoq_nobody_cnt', 'leo?/');
+  //   }
+  // },
 
   bug_handler_hdq: function(error, bugs) {
     if (!error) {
@@ -565,7 +565,7 @@ var bgzla = {
     var trend_1 = [];
     var trend_2 = [];
     var trend_3 = [];
-    var trend_4 = [];
+    // var trend_4 = [];
 
     var tefRef = new Firebase(GAIA.dataRef);
     tefRef.on('value', function(snapshot) {
@@ -574,28 +574,28 @@ var bgzla = {
         var subfix = ' 6:00AM';
         // console.log(that.data);
         var fence = moment().day(-46);
-        for (var i in data['leo ']) {
-          if(moment(i, "YYYY-MM-DD").isAfter(fence)){
-            trend_1.push([i + subfix, data['leo '][i]]);
-          }
-        }
         for (var i in data['hd ']) {
           if(moment(i, "YYYY-MM-DD").isAfter(fence)){
-            trend_2.push([i + subfix, data['hd '][i]]);
+            trend_1.push([i + subfix, data['hd '][i]]);
           }
         }
         for (var i in data['koi ']) {
           if(moment(i, "YYYY-MM-DD").isAfter(fence)){
-            trend_3.push([i + subfix, data['koi '][i]]);
+            trend_2.push([i + subfix, data['koi '][i]]);
           }
         }
-        for (var i in data['1.3 ']) {
+        for (var i in data['13 ']) {
           if(moment(i, "YYYY-MM-DD").isAfter(fence)){
-            trend_4.push([i + subfix, data['1.3 '][i]]);
+            trend_3.push([i + subfix, data['13 '][i]]);
           }
         }
+        // for (var i in data['1.3 ']) {
+        //   if(moment(i, "YYYY-MM-DD").isAfter(fence)){
+        //     trend_4.push([i + subfix, data['1.3 '][i]]);
+        //   }
+        // }
         // console.log(line1);
-        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3, trend_4], {
+        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3], {
           title: 'Daily Trend',
           stackSeries: true,
           legend: {
@@ -619,7 +619,6 @@ var bgzla = {
             }
           },
           series: [
-            {label: 'leo+'},
             {label: 'hd+'},
             {label: 'koi+'},
             {label: '1.3+'}
