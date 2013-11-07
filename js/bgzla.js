@@ -334,7 +334,8 @@ var bgzla = {
       $('#peer1_email_id').text(GAIA.peer1_email);
       // $('#bgtodo').show();
       // $('#bgtodo').attr('href',
-      //   'http://harthur.github.io/bugzilla-todos/?email=' + GAIA.peer1_email);
+      // 'http://harthur.github.io/bugzilla-todos/?email='
+      // + GAIA.peer1_email);
       GAIA.peer1_params['email1'] = GAIA.peer1_email;
       GAIA.peer1_params['email1_assigned_to'] = 1;
       var that = this;
@@ -360,7 +361,8 @@ var bgzla = {
       $('#peer2_email_id').text(GAIA.peer2_email);
       // $('#bgtodo').show();
       // $('#bgtodo').attr('href',
-      //   'http://harthur.github.io/bugzilla-todos/?email=' + GAIA.peer1_email);
+      //   'http://harthur.github.io/bugzilla-todos/?email='
+      // + GAIA.peer1_email);
       GAIA.peer2_params['email1'] = GAIA.peer2_email;
       GAIA.peer2_params['email1_assigned_to'] = 1;
       var that = this;
@@ -403,7 +405,7 @@ var bgzla = {
     this.emit_peer1_change();
   },
 
-  input_bugzilla_peer2_id: function(peer) {    
+  input_bugzilla_peer2_id: function(peer) {
     GAIA.peer2_email = prompt('Enter peer bugzilla email' +
                            ' (only stored in this browser):');
     if (GAIA.peer2_email !== null || GAIA.peer2_email !== undefined) {
@@ -567,31 +569,31 @@ var bgzla = {
     var trend_3 = [];
     // var trend_4 = [];
 
-    var tefRef = new Firebase(GAIA.dataRef);
-    tefRef.on('value', function(snapshot) {
+    var plotRef = new Firebase(GAIA.dataRef);
+    plotRef.on('value', function(snapshot) {
       if (snapshot.val() !== null) {
         var data = snapshot.val();
         var subfix = ' 6:00AM';
         // console.log(that.data);
         var fence = moment().day(-46);
         for (var i in data['hd ']) {
-          if(moment(i, "YYYY-MM-DD").isAfter(fence)){
+          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
             trend_1.push([i + subfix, data['hd '][i]]);
           }
         }
         for (var i in data['koi ']) {
-          if(moment(i, "YYYY-MM-DD").isAfter(fence)){
+          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
             trend_2.push([i + subfix, data['koi '][i]]);
           }
         }
         for (var i in data['13 ']) {
-          if(moment(i, "YYYY-MM-DD").isAfter(fence)){
+          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
             trend_3.push([i + subfix, data['13 '][i]]);
           }
         }
-        // for (var i in data['1.3 ']) {
-        //   if(moment(i, "YYYY-MM-DD").isAfter(fence)){
-        //     trend_4.push([i + subfix, data['1.3 '][i]]);
+        // for (var i in data['14 ']) {
+        //   if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
+        //     trend_4.push([i + subfix, data['14 '][i]]);
         //   }
         // }
         // console.log(line1);
@@ -616,7 +618,8 @@ var bgzla = {
               },
               drawMajorGridlines: false,
               tickInterval: '7 day'
-            }
+            },
+            yaxis: {min: 0}
           },
           series: [
             {label: 'hd+'},
