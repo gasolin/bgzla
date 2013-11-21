@@ -24,16 +24,6 @@ var GAIA = {
         'field1-0-0': 'whiteboard',
         'type1-0-0': 'not_contains',
         'value1-0-0': 'npotb',
-        'component': ['Gaia', 'Gaia::Bluetooth File Transfer', 'Gaia::Browser',
-                      'Gaia::Calculator', 'Gaia::Camera', 'Gaia::Clock',
-                      'Gaia::Contacts', 'Gaia::Cost Control', 'Gaia::Dialer',
-                      'Gaia::E-Mail', 'Gaia::Everything.me',
-                      'Gaia::First Time Experience', 'Gaia::FMRadio',
-                      'Gaia::Gallery', 'Gaia::Homescreen',
-                      'Gaia::Keyboard', 'Gaia::Music', 'Gaia::PDF Viewer',
-                      'Gaia::Settings', 'Gaia::SMS', 'Gaia::System',
-                      'Gaia::System::Lockscreen', 'Gaia::Video', 'General'
-                     ],
         'product': 'Firefox OS'
   },
   dataRef: 'https://mozilla-bgzla.firebaseIO.com/flag/'
