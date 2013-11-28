@@ -111,10 +111,9 @@ var bgzla = {
       location.reload();
     });
 
-    // var 13_bugs;
     GAIA.v13_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.v13_params['value0-0-0'] = '1.3+';
-    // blockers: tef+, not npotb
+    // blockers: 1.3+, not npotb
     GAIA.bugzilla.searchBugs(GAIA.v13_params, function(error, bugs) {
       that.bug_handler_13(error, bugs);
     });
@@ -123,10 +122,9 @@ var bgzla = {
       that.toggle_panel(event, '#13_panel');
     });
 
-    // var 13q_bugs;
     GAIA.v13q_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.v13q_params['value0-0-0'] = '1.3?';
-    // blockers: tef+, not npotb
+    // blockers: 1.3?, not npotb
     GAIA.bugzilla.searchBugs(GAIA.v13q_params, function(error, bugs) {
       that.bug_handler_13q(error, bugs);
     });
@@ -135,7 +133,6 @@ var bgzla = {
       that.toggle_panel(event, '#13q_panel');
     });
 
-    // var hd_bugs;
     GAIA.tef_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.tef_params['value0-0-0'] = 'hd+';
     // blockers: hd+, not npotb
@@ -147,22 +144,31 @@ var bgzla = {
       that.toggle_panel(event, '#tef_panel');
     });
 
-    // var leo_bugs;
-    // GAIA.leo_params = JSON.parse(JSON.stringify(GAIA.params));
-    // GAIA.leo_params['value0-0-0'] = 'leo+';
-    // // blockers: leo+, not npotb
-    // GAIA.bugzilla.searchBugs(GAIA.leo_params, function(error, bugs) {
-    //   that.bug_handler_leo(error, bugs);
-    // });
+    GAIA.v14_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.v14_params['value0-0-0'] = '1.4+';
+    // blockers: 1.4+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.v14_params, function(error, bugs) {
+      that.bug_handler_14(error, bugs);
+    });
 
-    // $('#leo_cnt').bind('touchstart mousedown', function(event) {
-    //   that.toggle_panel(event, '#leo_panel');
-    // });
+    $('#14_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#14_panel');
+    });
 
-    // var koi_bugs;
+    GAIA.v14q_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.v14q_params['value0-0-0'] = '1.4?';
+    // blockers: 1.4?, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.v14q_params, function(error, bugs) {
+      that.bug_handler_14q(error, bugs);
+    });
+
+    $('#14q_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#14q_panel');
+    });
+
     GAIA.koi_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.koi_params['value0-0-0'] = 'koi+';
-    // blockers: leo+, not npotb
+    // blockers: koi+, not npotb
     GAIA.bugzilla.searchBugs(GAIA.koi_params, function(error, bugs) {
       that.bug_handler_koi(error, bugs);
     });
@@ -171,20 +177,9 @@ var bgzla = {
       that.toggle_panel(event, '#koi_panel');
     });
 
-    // GAIA.leoq_params = JSON.parse(JSON.stringify(GAIA.params));
-    // GAIA.leoq_params['value0-0-0'] = 'leo?';
-    // // blockers: tef+, not npotb
-    // GAIA.bugzilla.searchBugs(GAIA.leoq_params, function(error, bugs) {
-    //   that.bug_handler_leoq(error, bugs);
-    // });
-
-    // $('#leoq_cnt').bind('touchstart mousedown', function(event) {
-    //   that.toggle_panel(event, '#leoq_panel');
-    // });
-
     GAIA.hdq_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.hdq_params['value0-0-0'] = 'hd?';
-    // blockers: tef+, not npotb
+    // blockers: hd?, not npotb
     GAIA.bugzilla.searchBugs(GAIA.hdq_params, function(error, bugs) {
       that.bug_handler_hdq(error, bugs);
     });
@@ -195,7 +190,7 @@ var bgzla = {
 
     GAIA.koiq_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.koiq_params['value0-0-0'] = 'koi?';
-    // blockers: tef+, not npotb
+    // blockers: koi?, not npotb
     GAIA.bugzilla.searchBugs(GAIA.koiq_params, function(error, bugs) {
       that.bug_handler_koiq(error, bugs);
     });
@@ -511,12 +506,12 @@ var bgzla = {
     }
   },
 
-  // bug_handler_leo: function(error, bugs) {
-  //   if (!error) {
-  //     this.base_bug_handler(bugs,
-  //       '#leo_panel', '#leo_cnt', '#leo_nobody_cnt', 'leo+/');
-  //   }
-  // },
+  bug_handler_14: function(error, bugs) {
+    if (!error) {
+      this.base_bug_handler(bugs,
+        '#14_panel', '#14_cnt', '#14_nobody_cnt', '14+/');
+    }
+  },
 
   bug_handler_koi: function(error, bugs) {
     if (!error) {
@@ -532,12 +527,12 @@ var bgzla = {
     }
   },
 
-  // bug_handler_leoq: function(error, bugs) {
-  //   if (!error) {
-  //     this.base_bug_handler(bugs,
-  //       '#leoq_panel', '#leoq_cnt', '#leoq_nobody_cnt', 'leo?/');
-  //   }
-  // },
+  bug_handler_14q: function(error, bugs) {
+    if (!error) {
+      this.base_bug_handler(bugs,
+        '#14q_panel', '#14q_cnt', '#14q_nobody_cnt', '14?/');
+    }
+  },
 
   bug_handler_hdq: function(error, bugs) {
     if (!error) {
@@ -557,7 +552,7 @@ var bgzla = {
     var trend_1 = [];
     var trend_2 = [];
     var trend_3 = [];
-    // var trend_4 = [];
+    var trend_4 = [];
 
     var plotRef = new Firebase(GAIA.dataRef);
     plotRef.on('value', function(snapshot) {
@@ -581,13 +576,13 @@ var bgzla = {
             trend_3.push([i + subfix, data['13 '][i]]);
           }
         }
-        // for (var i in data['14 ']) {
-        //   if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-        //     trend_4.push([i + subfix, data['14 '][i]]);
-        //   }
-        // }
+        for (var i in data['14 ']) {
+          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
+            trend_4.push([i + subfix, data['14 '][i]]);
+          }
+        }
         // console.log(line1);
-        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3], {
+        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3, trend_4], {
           title: 'Daily Trend',
           stackSeries: true,
           legend: {
@@ -614,7 +609,8 @@ var bgzla = {
           series: [
             {label: 'hd+'},
             {label: 'koi+'},
-            {label: '1.3+'}
+            {label: '1.3+'},
+            {label: '1.4+'}
           ],
           seriesDefaults: {
             fill: true
