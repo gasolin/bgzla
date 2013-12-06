@@ -133,15 +133,15 @@ var bgzla = {
       that.toggle_panel(event, '#13q_panel');
     });
 
-    GAIA.tef_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.tef_params['value0-0-0'] = 'hd+';
-    // blockers: hd+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.tef_params, function(error, bugs) {
-      that.bug_handler_tef(error, bugs);
+    GAIA.fugu_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.fugu_params['value0-0-0'] = 'fugu+';
+    // blockers: fugu+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.fugu_params, function(error, bugs) {
+      that.bug_handler_fugu(error, bugs);
     });
 
-    $('#tef_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#tef_panel');
+    $('#fugu_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#fugu_panel');
     });
 
     GAIA.v14_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -177,15 +177,15 @@ var bgzla = {
       that.toggle_panel(event, '#koi_panel');
     });
 
-    GAIA.hdq_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.hdq_params['value0-0-0'] = 'hd?';
-    // blockers: hd?, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.hdq_params, function(error, bugs) {
-      that.bug_handler_hdq(error, bugs);
+    GAIA.fuguq_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.fuguq_params['value0-0-0'] = 'fugu?';
+    // blockers: fugu?, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.fuguq_params, function(error, bugs) {
+      that.bug_handler_fuguq(error, bugs);
     });
 
-    $('#hdq_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#hdq_panel');
+    $('#fuguq_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#fuguq_panel');
     });
 
     GAIA.koiq_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -499,10 +499,10 @@ var bgzla = {
     }
   },
 
-  bug_handler_tef: function(error, bugs) {
+  bug_handler_fugu: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#tef_panel', '#tef_cnt', '#tef_nobody_cnt', 'hd+/');
+        '#fugu_panel', '#fugu_cnt', '#fugu_nobody_cnt', 'fugu+/');
     }
   },
 
@@ -534,10 +534,10 @@ var bgzla = {
     }
   },
 
-  bug_handler_hdq: function(error, bugs) {
+  bug_handler_fuguq: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#hdq_panel', '#hdq_cnt', '#hdq_nobody_cnt', 'hd?/');
+        '#fuguq_panel', '#fuguq_cnt', '#fuguq_nobody_cnt', 'fugu?/');
     }
   },
 
@@ -561,16 +561,17 @@ var bgzla = {
         var subfix = ' 6:00AM';
         // console.log(that.data);
         var fence = moment().day(-46);
-        for (var i in data['hd ']) {
-          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-            trend_1.push([i + subfix, data['hd '][i]]);
-          }
-        }
+        // TODO: fill 0
         for (var i in data['koi ']) {
           if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-            trend_2.push([i + subfix, data['koi '][i]]);
+            trend_1.push([i + subfix, data['koi '][i]]);
           }
         }
+        // for (var i in data['fugu ']) {
+        //   if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
+        //     trend_2.push([i + subfix, data['fugu '][i]]);
+        //   }
+        // }
         for (var i in data['13 ']) {
           if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
             trend_3.push([i + subfix, data['13 '][i]]);
@@ -582,7 +583,7 @@ var bgzla = {
           }
         }
         // console.log(line1);
-        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3, trend_4], {
+        var plot1 = $.jqplot('daily_trend', [trend_1, /*trend_2,*/ trend_3/*, trend_4*/], {
           title: 'Daily Trend',
           stackSeries: true,
           legend: {
@@ -607,10 +608,10 @@ var bgzla = {
             yaxis: {min: 0}
           },
           series: [
-            {label: 'hd+'},
             {label: 'koi+'},
+            // {label: 'fugu+'},
             {label: '1.3+'},
-            {label: '1.4+'}
+            // {label: '1.4+'}
           ],
           seriesDefaults: {
             fill: true
