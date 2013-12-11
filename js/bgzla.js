@@ -117,7 +117,6 @@ var bgzla = {
     GAIA.bugzilla.searchBugs(GAIA.v13_params, function(error, bugs) {
       that.bug_handler_13(error, bugs);
     });
-
     $('#13_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#13_panel');
     });
@@ -128,7 +127,6 @@ var bgzla = {
     GAIA.bugzilla.searchBugs(GAIA.v13q_params, function(error, bugs) {
       that.bug_handler_13q(error, bugs);
     });
-
     $('#13q_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#13q_panel');
     });
@@ -139,9 +137,18 @@ var bgzla = {
     GAIA.bugzilla.searchBugs(GAIA.fugu_params, function(error, bugs) {
       that.bug_handler_fugu(error, bugs);
     });
-
     $('#fugu_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#fugu_panel');
+    });
+
+    GAIA.fuguq_params = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA.fuguq_params['value0-0-0'] = 'fugu?';
+    // blockers: fugu?, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.fuguq_params, function(error, bugs) {
+      that.bug_handler_fuguq(error, bugs);
+    });
+    $('#fuguq_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#fuguq_panel');
     });
 
     GAIA.v14_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -150,7 +157,6 @@ var bgzla = {
     GAIA.bugzilla.searchBugs(GAIA.v14_params, function(error, bugs) {
       that.bug_handler_14(error, bugs);
     });
-
     $('#14_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#14_panel');
     });
@@ -161,7 +167,6 @@ var bgzla = {
     GAIA.bugzilla.searchBugs(GAIA.v14q_params, function(error, bugs) {
       that.bug_handler_14q(error, bugs);
     });
-
     $('#14q_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#14q_panel');
     });
@@ -172,20 +177,8 @@ var bgzla = {
     GAIA.bugzilla.searchBugs(GAIA.koi_params, function(error, bugs) {
       that.bug_handler_koi(error, bugs);
     });
-
     $('#koi_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#koi_panel');
-    });
-
-    GAIA.fuguq_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.fuguq_params['value0-0-0'] = 'fugu?';
-    // blockers: fugu?, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.fuguq_params, function(error, bugs) {
-      that.bug_handler_fuguq(error, bugs);
-    });
-
-    $('#fuguq_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#fuguq_panel');
     });
 
     GAIA.koiq_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -548,15 +541,35 @@ var bgzla = {
     }
   },
 
-  contains: function(trend_list, obj) {
+  contains: function(trend_list, obj, subfix) {
     for (var i in trend_list) {
       // console.log(i + ' 6:00AM/'+obj);
-      if(obj === i + ' 6:00AM') {
-        // console.log('matched');
+      if(obj === i + subfix) {
         return 1;
       }
     }
     return 0;
+  },
+
+  prepare_data: function(base_trend, trend_obj, fence, subfix) {
+    var trend_list = [];
+    var skip = false;
+    for (var j in base_trend) {
+          var target = base_trend[j][0];
+          if (!skip) {
+            if (this.contains(trend_obj, target, subfix) === 0) {
+              trend_list.push([target, 0]);
+            } else {
+              skip = true;
+            }
+          }
+        }
+        for (var i in trend_obj) {
+          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
+            trend_list.push([i + subfix, trend_obj[i]]);
+          }
+        }
+    return trend_list;
   },
 
   plot_trend: function() {
@@ -564,83 +577,31 @@ var bgzla = {
     var trend_2 = [];
     var trend_3 = [];
     var trend_4 = [];
-    var base_trend = [];
     var self = this;
 
     var plotRef = new Firebase(GAIA.dataRef);
     plotRef.on('value', function(snapshot) {
       if (snapshot.val() !== null) {
         var data = snapshot.val();
-        var subfix = ' 6:00AM';
-        // console.log(that.data);
         var fence = moment().day(-46);
-        for (var i in data['koi ']) {
-          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-            trend_1.push([i + subfix, data['koi '][i]]);
-          }
-        }
-        base_trend = trend_1;
+        var subfix = ' 6:00AM';
 
-        var skip = false;
-        var trend_2_obj = data['fugu '];
-        // fill 0
-        for (var j in base_trend) {
-          var target = base_trend[j][0];
-          if (!skip) {
-            if (self.contains(trend_2_obj, target) === 0) {
-              trend_2.push([target, 0]);
-            } else {
-              skip = true;
-            }
-          }
-        }
-        for (var i in trend_2_obj) {
-          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-            trend_2.push([i + subfix, trend_2_obj[i]]);
-          }
-        }
+        trend_1 = self.prepare_data([],
+          data['koi '],
+          fence, subfix);
+        var base_trend = trend_1;
+        trend_2 = self.prepare_data(base_trend,
+          data['fugu '],
+          fence, subfix);
+        trend_3 = self.prepare_data(base_trend,
+          data['13 '],
+          fence, subfix);
+        trend_4 = self.prepare_data(base_trend,
+          data['14 '],
+          fence, subfix);
 
-        skip = false;
-        var trend_3_obj = data['13 '];
-        // fill 0
-        for (var j in base_trend) {
-          var target = base_trend[j][0];
-          // console.log('m'+target+'/'+self.contains(trend_3_obj, target));
-          if (!skip) {
-            if (self.contains(trend_3_obj, target) === 0) {
-              trend_3.push([target, 0]);
-            } else {
-              // console.log('first date:'+target);
-              skip = true;
-            }
-          }
-        }
-        for (var i in trend_3_obj) {
-          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-            trend_3.push([i + subfix, trend_3_obj[i]]);
-          }
-        }
-
-        skip = false;
-        var trend_4_obj = data['14 '];
-        for (var j in base_trend) {
-          var target = base_trend[j][0];
-          if (!skip) {
-            if (self.contains(trend_4_obj, target) === 0) {
-              trend_4.push([target, 0]);
-            } else {
-              console.log('first date:'+target);
-              skip = true;
-            }
-          }
-        }
-        for (var i in trend_4_obj) {
-          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-            trend_4.push([i + subfix, trend_4_obj[i]]);
-          }
-        }
-
-        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3, trend_4], {
+        var plot1 = $.jqplot('daily_trend',
+          [trend_1, trend_2, trend_3, trend_4], {
           title: 'Daily Trend',
           stackSeries: true,
           legend: {
