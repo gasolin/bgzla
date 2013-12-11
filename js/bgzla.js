@@ -548,11 +548,24 @@ var bgzla = {
     }
   },
 
+  contains: function(trend_list, obj) {
+    for (var i in trend_list) {
+      // console.log(i + ' 6:00AM/'+obj);
+      if(obj === i + ' 6:00AM') {
+        // console.log('matched');
+        return 1;
+      }
+    }
+    return 0;
+  },
+
   plot_trend: function() {
     var trend_1 = [];
     var trend_2 = [];
     var trend_3 = [];
     var trend_4 = [];
+    var base_trend = [];
+    var self = this;
 
     var plotRef = new Firebase(GAIA.dataRef);
     plotRef.on('value', function(snapshot) {
@@ -561,29 +574,73 @@ var bgzla = {
         var subfix = ' 6:00AM';
         // console.log(that.data);
         var fence = moment().day(-46);
-        // TODO: fill 0
         for (var i in data['koi ']) {
           if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
             trend_1.push([i + subfix, data['koi '][i]]);
           }
         }
-        // for (var i in data['fugu ']) {
-        //   if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-        //     trend_2.push([i + subfix, data['fugu '][i]]);
-        //   }
-        // }
-        for (var i in data['13 ']) {
-          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-            trend_3.push([i + subfix, data['13 '][i]]);
+        base_trend = trend_1;
+
+        var skip = false;
+        var trend_2_obj = data['fugu '];
+        // fill 0
+        for (var j in base_trend) {
+          var target = base_trend[j][0];
+          if (!skip) {
+            if (self.contains(trend_2_obj, target) === 0) {
+              trend_2.push([target, 0]);
+            } else {
+              skip = true;
+            }
           }
         }
-        for (var i in data['14 ']) {
+        for (var i in trend_2_obj) {
           if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
-            trend_4.push([i + subfix, data['14 '][i]]);
+            trend_2.push([i + subfix, trend_2_obj[i]]);
           }
         }
-        // console.log(line1);
-        var plot1 = $.jqplot('daily_trend', [trend_1, /*trend_2,*/ trend_3/*, trend_4*/], {
+
+        skip = false;
+        var trend_3_obj = data['13 '];
+        // fill 0
+        for (var j in base_trend) {
+          var target = base_trend[j][0];
+          // console.log('m'+target+'/'+self.contains(trend_3_obj, target));
+          if (!skip) {
+            if (self.contains(trend_3_obj, target) === 0) {
+              trend_3.push([target, 0]);
+            } else {
+              // console.log('first date:'+target);
+              skip = true;
+            }
+          }
+        }
+        for (var i in trend_3_obj) {
+          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
+            trend_3.push([i + subfix, trend_3_obj[i]]);
+          }
+        }
+
+        skip = false;
+        var trend_4_obj = data['14 '];
+        for (var j in base_trend) {
+          var target = base_trend[j][0];
+          if (!skip) {
+            if (self.contains(trend_4_obj, target) === 0) {
+              trend_4.push([target, 0]);
+            } else {
+              console.log('first date:'+target);
+              skip = true;
+            }
+          }
+        }
+        for (var i in trend_4_obj) {
+          if (moment(i, 'YYYY-MM-DD').isAfter(fence)) {
+            trend_4.push([i + subfix, trend_4_obj[i]]);
+          }
+        }
+
+        var plot1 = $.jqplot('daily_trend', [trend_1, trend_2, trend_3, trend_4], {
           title: 'Daily Trend',
           stackSeries: true,
           legend: {
@@ -609,9 +666,9 @@ var bgzla = {
           },
           series: [
             {label: 'koi+'},
-            // {label: 'fugu+'},
+            {label: 'fugu+'},
             {label: '1.3+'},
-            // {label: '1.4+'}
+            {label: '1.4+'}
           ],
           seriesDefaults: {
             fill: true
