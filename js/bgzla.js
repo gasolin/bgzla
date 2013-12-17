@@ -111,79 +111,14 @@ var bgzla = {
       location.reload();
     });
 
-    this.register_panel('1.3+', '13');
-    // blockers: 1.3+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.v13_params, function(error, bugs) {
-      that.bug_handler_13(error, bugs);
-    });
-    $('#13_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#13_panel');
-    });
-
-    this.register_panel('1.3?', '13q');
-    GAIA.v13q_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.v13q_params['value0-0-0'] = '1.3?';
-    // blockers: 1.3?, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.v13q_params, function(error, bugs) {
-      that.bug_handler_13q(error, bugs);
-    });
-    $('#13q_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#13q_panel');
-    });
-
-    this.register_panel('fugu+', 'fugu');
-    // blockers: fugu+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.vfugu_params, function(error, bugs) {
-      that.bug_handler_fugu(error, bugs);
-    });
-    $('#fugu_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#fugu_panel');
-    });
-
-    this.register_panel('fugu?', 'fuguq');
-    // blockers: fugu?, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.vfuguq_params, function(error, bugs) {
-      that.bug_handler_fuguq(error, bugs);
-    });
-    $('#fuguq_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#fuguq_panel');
-    });
-
-    this.register_panel('1.4+', '14');
-    // blockers: 1.4+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.v14_params, function(error, bugs) {
-      that.bug_handler_14(error, bugs);
-    });
-    $('#14_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#14_panel');
-    });
-
-    this.register_panel('1.4?', '14q');
-    // blockers: 1.4?, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.v14q_params, function(error, bugs) {
-      that.bug_handler_14q(error, bugs);
-    });
-    $('#14q_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#14q_panel');
-    });
-
-    this.register_panel('koi+', 'koi');
-    // // blockers: koi+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.vkoi_params, function(error, bugs) {
-      that.bug_handler_koi(error, bugs);
-    });
-    $('#koi_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#koi_panel');
-    });
-
-    this.register_panel('koi?', 'koiq');
-    // // blockers: koi?, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.vkoiq_params, function(error, bugs) {
-      that.bug_handler_koiq(error, bugs);
-    });
-    $('#koiq_cnt').bind('touchstart mousedown', function(event) {
-      that.toggle_panel(event, '#koiq_panel');
-    });
+    this.register_panel('1.3+', '13', this);
+    this.register_panel('1.3?', '13q', this);
+    this.register_panel('fugu+', 'fugu', this);
+    this.register_panel('fugu?', 'fuguq', this);
+    this.register_panel('1.4+', '14', this);
+    this.register_panel('1.4?', '14q', this);
+    this.register_panel('koi+', 'koi', this);
+    this.register_panel('koi?', 'koiq', this);
 
     this.plot_trend();
   },
@@ -243,18 +178,16 @@ var bgzla = {
     return item;
   },
 
-  register_panel: function(flag, id) {
+  register_panel: function(flag, id, that) {
     GAIA['v' + id + '_params'] = JSON.parse(JSON.stringify(GAIA.params));
     GAIA['v' + id + '_params']['value0-0-0'] = flag;
-    console.log('v' + id + '_params');
-    // var self = this;
-    // GAIA.bugzilla.searchBugs(GAIA['v' + id + '_params'],
-    //   function(error, bugs) {
-    //   self['bug_handler_' + id](error, bugs);
-    // });
-    // $('#' + id + '_cnt').bind('touchstart mousedown', function(event) {
-    //   self.toggle_panel(event, '#' + id + '_panel');
-    // });
+    GAIA.bugzilla.searchBugs(GAIA['v' + id + '_params'],
+      function(error, bugs) {
+      that['bug_handler_' + id](error, bugs);
+    });
+    $('#' + id + '_cnt').bind('touchstart mousedown', function(event) {
+      that.toggle_panel(event, '#' + id + '_panel');
+    });
   },
 
   emit_myid_change: function() {
