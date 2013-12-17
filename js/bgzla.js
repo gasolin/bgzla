@@ -111,8 +111,7 @@ var bgzla = {
       location.reload();
     });
 
-    GAIA.v13_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.v13_params['value0-0-0'] = '1.3+';
+    this.register_panel('1.3+', '13');
     // blockers: 1.3+, not npotb
     GAIA.bugzilla.searchBugs(GAIA.v13_params, function(error, bugs) {
       that.bug_handler_13(error, bugs);
@@ -121,6 +120,7 @@ var bgzla = {
       that.toggle_panel(event, '#13_panel');
     });
 
+    this.register_panel('1.3?', '13q');
     GAIA.v13q_params = JSON.parse(JSON.stringify(GAIA.params));
     GAIA.v13q_params['value0-0-0'] = '1.3?';
     // blockers: 1.3?, not npotb
@@ -131,28 +131,25 @@ var bgzla = {
       that.toggle_panel(event, '#13q_panel');
     });
 
-    GAIA.fugu_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.fugu_params['value0-0-0'] = 'fugu+';
+    this.register_panel('fugu+', 'fugu');
     // blockers: fugu+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.fugu_params, function(error, bugs) {
+    GAIA.bugzilla.searchBugs(GAIA.vfugu_params, function(error, bugs) {
       that.bug_handler_fugu(error, bugs);
     });
     $('#fugu_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#fugu_panel');
     });
 
-    GAIA.fuguq_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.fuguq_params['value0-0-0'] = 'fugu?';
+    this.register_panel('fugu?', 'fuguq');
     // blockers: fugu?, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.fuguq_params, function(error, bugs) {
+    GAIA.bugzilla.searchBugs(GAIA.vfuguq_params, function(error, bugs) {
       that.bug_handler_fuguq(error, bugs);
     });
     $('#fuguq_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#fuguq_panel');
     });
 
-    GAIA.v14_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.v14_params['value0-0-0'] = '1.4+';
+    this.register_panel('1.4+', '14');
     // blockers: 1.4+, not npotb
     GAIA.bugzilla.searchBugs(GAIA.v14_params, function(error, bugs) {
       that.bug_handler_14(error, bugs);
@@ -161,8 +158,7 @@ var bgzla = {
       that.toggle_panel(event, '#14_panel');
     });
 
-    GAIA.v14q_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.v14q_params['value0-0-0'] = '1.4?';
+    this.register_panel('1.4?', '14q');
     // blockers: 1.4?, not npotb
     GAIA.bugzilla.searchBugs(GAIA.v14q_params, function(error, bugs) {
       that.bug_handler_14q(error, bugs);
@@ -171,20 +167,18 @@ var bgzla = {
       that.toggle_panel(event, '#14q_panel');
     });
 
-    GAIA.koi_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.koi_params['value0-0-0'] = 'koi+';
-    // blockers: koi+, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.koi_params, function(error, bugs) {
+    this.register_panel('koi+', 'koi');
+    // // blockers: koi+, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.vkoi_params, function(error, bugs) {
       that.bug_handler_koi(error, bugs);
     });
     $('#koi_cnt').bind('touchstart mousedown', function(event) {
       that.toggle_panel(event, '#koi_panel');
     });
 
-    GAIA.koiq_params = JSON.parse(JSON.stringify(GAIA.params));
-    GAIA.koiq_params['value0-0-0'] = 'koi?';
-    // blockers: koi?, not npotb
-    GAIA.bugzilla.searchBugs(GAIA.koiq_params, function(error, bugs) {
+    this.register_panel('koi?', 'koiq');
+    // // blockers: koi?, not npotb
+    GAIA.bugzilla.searchBugs(GAIA.vkoiq_params, function(error, bugs) {
       that.bug_handler_koiq(error, bugs);
     });
     $('#koiq_cnt').bind('touchstart mousedown', function(event) {
@@ -247,6 +241,20 @@ var bgzla = {
     }
     item += '</li>\n';
     return item;
+  },
+
+  register_panel: function(flag, id) {
+    GAIA['v' + id + '_params'] = JSON.parse(JSON.stringify(GAIA.params));
+    GAIA['v' + id + '_params']['value0-0-0'] = flag;
+    console.log('v' + id + '_params');
+    // var self = this;
+    // GAIA.bugzilla.searchBugs(GAIA['v' + id + '_params'],
+    //   function(error, bugs) {
+    //   self['bug_handler_' + id](error, bugs);
+    // });
+    // $('#' + id + '_cnt').bind('touchstart mousedown', function(event) {
+    //   self.toggle_panel(event, '#' + id + '_panel');
+    // });
   },
 
   emit_myid_change: function() {
