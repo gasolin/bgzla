@@ -117,8 +117,8 @@ var bgzla = {
     this.register_panel('fugu?', 'fuguq', this);
     this.register_panel('1.4+', '14', this);
     this.register_panel('1.4?', '14q', this);
-    this.register_panel('koi+', 'koi', this);
-    this.register_panel('koi?', 'koiq', this);
+    // this.register_panel('koi+', 'koi', this);
+    // this.register_panel('koi?', 'koiq', this);
 
     this.plot_trend();
   },
@@ -239,6 +239,8 @@ var bgzla = {
           bugs.sort(that.sorters.byLastChangeTime);
           for (var i = 0; i < bugs.length; i++) {
             outcome += that.format_bug(bugs[i], true);
+            // analyze category size
+            // console.log(bugs[i].component);
           }
           outcome += '</ul>';
           $('#mine_last_panel').html(outcome);
@@ -447,12 +449,12 @@ var bgzla = {
     }
   },
 
-  bug_handler_koi: function(error, bugs) {
+  /*bug_handler_koi: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
         '#koi_panel', '#koi_cnt', '#koi_nobody_cnt', 'koi+/');
     }
-  },
+  },*/
 
   bug_handler_13q: function(error, bugs) {
     if (!error) {
@@ -475,12 +477,12 @@ var bgzla = {
     }
   },
 
-  bug_handler_koiq: function(error, bugs) {
+  /*bug_handler_koiq: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
         '#koiq_panel', '#koiq_cnt', '#koiq_nobody_cnt', 'koi?/');
     }
-  },
+  },*/
 
   contains: function(trend_list, obj, subfix) {
     for (var i in trend_list) {
@@ -527,22 +529,23 @@ var bgzla = {
         var fence = moment().day(-46);
         var subfix = ' 6:00AM';
 
-        trend_1 = self.prepare_data([],
-          data['koi '],
-          fence, subfix);
-        var base_trend = trend_1;
-        trend_2 = self.prepare_data(base_trend,
-          data['fugu '],
-          fence, subfix);
+        // trend_1 = self.prepare_data([],
+        //   data['koi '],
+        //   fence, subfix);
+        // var base_trend = trend_1;
+        // trend_2 = self.prepare_data(base_trend,
+        //   data['fugu '],
+        //   fence, subfix);
         trend_3 = self.prepare_data(base_trend,
           data['13 '],
           fence, subfix);
+        var base_trend = trend_3;
         trend_4 = self.prepare_data(base_trend,
           data['14 '],
           fence, subfix);
 
         var plot1 = $.jqplot('daily_trend',
-          [trend_1, trend_2, trend_3, trend_4], {
+          [/*trend_1, trend_2, */trend_3, trend_4], {
           title: 'Daily Trend',
           stackSeries: true,
           legend: {
@@ -567,8 +570,8 @@ var bgzla = {
             yaxis: {min: 0}
           },
           series: [
-            {label: 'koi+'},
-            {label: 'fugu+'},
+            /*{label: 'koi+'},
+            {label: 'fugu+'},*/
             {label: '1.3+'},
             {label: '1.4+'}
           ],
