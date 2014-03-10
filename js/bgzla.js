@@ -113,8 +113,8 @@ var bgzla = {
 
     this.register_panel('1.3+', '13', this);
     this.register_panel('1.3?', '13q', this);
-    this.register_panel('fugu+', 'fugu', this);
-    this.register_panel('fugu?', 'fuguq', this);
+    this.register_panel('1.5+', '15', this);
+    this.register_panel('1.5?', '15q', this);
     this.register_panel('1.4+', '14', this);
     this.register_panel('1.4?', '14q', this);
     // this.register_panel('koi+', 'koi', this);
@@ -435,10 +435,10 @@ var bgzla = {
     }
   },
 
-  bug_handler_fugu: function(error, bugs) {
+  bug_handler_15: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#fugu_panel', '#fugu_cnt', '#fugu_nobody_cnt', 'fugu+/');
+        '#15_panel', '#15_cnt', '#15_nobody_cnt', '15+/');
     }
   },
 
@@ -470,10 +470,10 @@ var bgzla = {
     }
   },
 
-  bug_handler_fuguq: function(error, bugs) {
+  bug_handler_15q: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#fuguq_panel', '#fuguq_cnt', '#fuguq_nobody_cnt', 'fugu?/');
+        '#15q_panel', '#15q_cnt', '#15q_nobody_cnt', '15?/');
     }
   },
 
@@ -533,19 +533,19 @@ var bgzla = {
         //   data['koi '],
         //   fence, subfix);
         // var base_trend = trend_1;
-        // trend_2 = self.prepare_data(base_trend,
-        //   data['fugu '],
-        //   fence, subfix);
-        trend_3 = self.prepare_data(base_trend,
+        trend_2 = self.prepare_data(base_trend,
           data['13 '],
           fence, subfix);
         var base_trend = trend_3;
-        trend_4 = self.prepare_data(base_trend,
+        trend_3 = self.prepare_data(base_trend,
           data['14 '],
+          fence, subfix);
+        trend_4 = self.prepare_data(base_trend,
+          data['15 '],
           fence, subfix);
 
         var plot1 = $.jqplot('daily_trend',
-          [/*trend_1, trend_2, */trend_3, trend_4], {
+          [/*trend_1,*/ trend_2, trend_3, trend_4], {
           title: 'Daily Trend',
           stackSeries: true,
           legend: {
@@ -570,10 +570,10 @@ var bgzla = {
             yaxis: {min: 0}
           },
           series: [
-            /*{label: 'koi+'},
-            {label: 'fugu+'},*/
+            /*{label: 'koi+'},*/
             {label: '1.3+'},
-            {label: '1.4+'}
+            {label: '1.4+'},
+            {label: '1.5+'}
           ],
           seriesDefaults: {
             fill: true
