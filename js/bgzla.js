@@ -111,8 +111,8 @@ var bgzla = {
       location.reload();
     });
 
-    this.register_panel('1.3+', '13', this);
-    this.register_panel('1.3?', '13q', this);
+    this.register_panel('2.1+', '21', this);
+    this.register_panel('2.1?', '21q', this);
     this.register_panel('2.0+', '20', this);
     this.register_panel('2.0?', '20q', this);
     this.register_panel('1.4+', '14', this);
@@ -428,10 +428,10 @@ var bgzla = {
     });
   },
 
-  bug_handler_13: function(error, bugs) {
+  bug_handler_21: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#13_panel', '#13_cnt', '#13_nobody_cnt', '13+/');
+        '#21_panel', '#21_cnt', '#21_nobody_cnt', '21+/');
     }
   },
 
@@ -456,10 +456,10 @@ var bgzla = {
     }
   },*/
 
-  bug_handler_13q: function(error, bugs) {
+  bug_handler_21q: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#13q_panel', '#13q_cnt', '#13q_nobody_cnt', '13?/');
+        '#21q_panel', '#21q_cnt', '#21q_nobody_cnt', '21?/');
     }
   },
 
@@ -534,14 +534,14 @@ var bgzla = {
         //   fence, subfix);
         // var base_trend = trend_1;
         trend_2 = self.prepare_data(base_trend,
-          data['13 '],
+          data['14 '],
           fence, subfix);
         var base_trend = trend_3;
         trend_3 = self.prepare_data(base_trend,
-          data['14 '],
+          data['20 '],
           fence, subfix);
         trend_4 = self.prepare_data(base_trend,
-          data['20 '],
+          data['21 '],
           fence, subfix);
 
         var plot1 = $.jqplot('daily_trend',
@@ -571,9 +571,9 @@ var bgzla = {
           },
           series: [
             /*{label: 'koi+'},*/
-            {label: '1.3+'},
             {label: '1.4+'},
-            {label: '2.0+'}
+            {label: '2.0+'},
+            {label: '2.1+'}
           ],
           seriesDefaults: {
             fill: true
