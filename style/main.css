@@ -14,3 +14,7 @@ em {
 .inactive {
 	color: #b2b2b2 !important;
 }
+
+.nav-tabs {
+  margin-top: -20px;
+}
