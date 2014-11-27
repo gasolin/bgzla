@@ -36,7 +36,7 @@ var bgzla = {
 
     var that = this;
 
-    asyncStorage.getItem('my_email', function(value) {
+    localforage.getItem('my_email', function(value) {
       GAIA.my_email = value;
       // var mine_bugs;
       GAIA.mine_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -65,7 +65,7 @@ var bgzla = {
       }
     });
 
-    asyncStorage.getItem('peer1_email', function(value) {
+    localforage.getItem('peer1_email', function(value) {
       GAIA.peer1_email = value;
 
       GAIA.peer1_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -81,7 +81,7 @@ var bgzla = {
       }
     });
 
-    asyncStorage.getItem('peer2_email', function(value) {
+    localforage.getItem('peer2_email', function(value) {
       GAIA.peer2_email = value;
 
       GAIA.peer2_params = JSON.parse(JSON.stringify(GAIA.params));
@@ -321,7 +321,7 @@ var bgzla = {
                            ' (only stored in this browser):');
     if (GAIA.peer1_email !== null || GAIA.peer1_email !== undefined) {
       console.log('peer1 account changed to ' + GAIA.peer1_email);
-      asyncStorage.setItem('peer1_email', GAIA.peer1_email);
+      localforage.setItem('peer1_email', GAIA.peer1_email);
     }
     this.emit_peer1_change();
   },
@@ -331,7 +331,7 @@ var bgzla = {
                            ' (only stored in this browser):');
     if (GAIA.peer2_email !== null || GAIA.peer2_email !== undefined) {
       console.log('peer2 account changed to ' + GAIA.peer2_email);
-      asyncStorage.setItem('peer2_email', GAIA.peer2_email);
+      localforage.setItem('peer2_email', GAIA.peer2_email);
     }
     this.emit_peer2_change();
   },
@@ -341,10 +341,10 @@ var bgzla = {
                            ' (only stored in this browser):');
     if (GAIA.my_email !== null || GAIA.my_email !== undefined) {
       console.log('my account changed to ' + GAIA.my_email);
-      asyncStorage.setItem('peer2_email', GAIA.my_email);
+      localforage.setItem('peer2_email', GAIA.my_email);
       GAIA.my_password = prompt('Enter my bugzilla password:');
       if (GAIA.my_password !== null || GAIA.my_password !== undefined) {
-        asyncStorage.setItem('my_password', GAIA.my_password);
+        localforage.setItem('my_password', GAIA.my_password);
       }
     }
     this.emit_myid_change();
@@ -365,9 +365,9 @@ var bgzla = {
         // 'confidential bugs, or just press OK button:');
         if (GAIA.my_email !== null || GAIA.my_email !== undefined) {
           console.log('default account changed to ' + GAIA.my_email);
-          asyncStorage.setItem('my_email', GAIA.my_email);
+          localforage.setItem('my_email', GAIA.my_email);
           if (GAIA.my_password !== null || GAIA.my_password !== undefined) {
-            asyncStorage.setItem('my_password', GAIA.my_password);
+            localforage.setItem('my_password', GAIA.my_password);
           }
           self.emit_myid_change();
         } else {
