@@ -111,10 +111,10 @@ var bgzla = {
       location.reload();
     });
 
-    this.register_panel('2.1+', '21', this);
-    this.register_panel('2.1?', '21q', this);
-    this.register_panel('2.0+', '20', this);
-    this.register_panel('2.0?', '20q', this);
+    this.register_panel('3.0+', '30', this);
+    this.register_panel('3.0?', '30q', this);
+    this.register_panel('2.5+', '25', this);
+    this.register_panel('2.5?', '25q', this);
     this.register_panel('2.2+', '22', this);
     this.register_panel('2.2?', '22q', this);
     // this.register_panel('koi+', 'koi', this);
@@ -428,17 +428,17 @@ var bgzla = {
     });
   },
 
-  bug_handler_21: function(error, bugs) {
+  bug_handler_30: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#21_panel', '#21_cnt', '#21_nobody_cnt', '21+/');
+        '#30_panel', '#30_cnt', '#30_nobody_cnt', '30+/');
     }
   },
 
-  bug_handler_20: function(error, bugs) {
+  bug_handler_25: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#20_panel', '#20_cnt', '#20_nobody_cnt', '20+/');
+        '#25_panel', '#25_cnt', '#25_nobody_cnt', '25+/');
     }
   },
 
@@ -456,10 +456,10 @@ var bgzla = {
     }
   },*/
 
-  bug_handler_21q: function(error, bugs) {
+  bug_handler_30q: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#21q_panel', '#21q_cnt', '#21q_nobody_cnt', '21?/');
+        '#30q_panel', '#30q_cnt', '#30q_nobody_cnt', '30?/');
     }
   },
 
@@ -470,10 +470,10 @@ var bgzla = {
     }
   },
 
-  bug_handler_20q: function(error, bugs) {
+  bug_handler_25q: function(error, bugs) {
     if (!error) {
       this.base_bug_handler(bugs,
-        '#20q_panel', '#20q_cnt', '#20q_nobody_cnt', '20?/');
+        '#25q_panel', '#25q_cnt', '#25q_nobody_cnt', '25?/');
     }
   },
 
@@ -533,15 +533,15 @@ var bgzla = {
         //   data['koi '],
         //   fence, subfix);
         // var base_trend = trend_1;
+        var base_trend = trend_2;
         trend_2 = self.prepare_data(base_trend,
-          data['20 '],
+          data['22 '],
           fence, subfix);
-        var base_trend = trend_3;
         trend_3 = self.prepare_data(base_trend,
-          data['21 '],
+          data['25 '],
           fence, subfix);
         trend_4 = self.prepare_data(base_trend,
-          data['22 '],
+          data['30 '],
           fence, subfix);
 
         var plot1 = $.jqplot('daily_trend',
@@ -571,9 +571,9 @@ var bgzla = {
           },
           series: [
             /*{label: 'koi+'},*/
-            {label: '2.0+'},
-            {label: '2.1+'},
-            {label: '2.2+'}
+            {label: '2.2+'},
+            {label: '2.5+'},
+            {label: '3.0+'}
           ],
           seriesDefaults: {
             fill: true
